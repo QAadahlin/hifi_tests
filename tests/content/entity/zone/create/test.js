@@ -1,4 +1,6 @@
 function tests_content_entity_zone_create() {
+    var localTestNumber = testNumber;
+    
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
     Render.getConfig("RenderMainView.DrawZoneStack").enabled = true
     Render.getConfig("RenderMainView.DrawZones").enabled = true
@@ -59,25 +61,32 @@ function tests_content_entity_zone_create() {
           
         step * STEP_TIME
     );
-
       
-    // clean up after test
-    step +=1;
+    // clean up after test (done in 2 steps)
+    step += 1;
     Script.setTimeout(
       function () {
-        Script.stop();
+          Window.takeSnapshot();
+          deleteEntities();
       },
       
       step * STEP_TIME
     );
-
-    Script.scriptEnding.connect(
-        function () {
-          Entities.deleteEntity(zone)
-          Render.getConfig("RenderMainView.DrawZoneStack").enabled = false
-          Render.getConfig("RenderMainView.DrawZones").enabled = false
-        }
+    step += 1;
+    Script.setTimeout(
+      function () {
+          // Exit script if not running autoTester
+          if (typeof testNumber == 'undefined') {
+              Script.stop();
+          } else {
+              testNumber = localTestNumber + 1;
+          }
+      },
+      
+      step * STEP_TIME
     );
 }
 
-tests_content_entity_zone_create();
+if (typeof testNumber == 'undefined') {
+    tests_content_entity_zone_create();
+}

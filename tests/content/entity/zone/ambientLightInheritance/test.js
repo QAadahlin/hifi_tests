@@ -1,4 +1,6 @@
 function tests_content_entity_zone_ambientLightInheritance() {
+    var localTestNumber = testNumber;
+    
     // The models are loaded from the "MODEL_DIR_URL" located on github where we store all our test models
     var MODEL_DIR_URL = "https://github.com/highfidelity/hifi_tests/blob/master/assets/models/material_matrix_models/fbx/blender/";
     var MODEL_NAME_SUFFIX = ".fbx?raw=true";
@@ -249,24 +251,31 @@ function tests_content_entity_zone_ambientLightInheritance() {
       step * STEP_TIME
     )
       
-    // clean up after test
+    // clean up after test (done in 2 steps)
     step += 1;
     Script.setTimeout(
       function () {
-        Window.takeSnapshot();
-
-        deleteEntities;
-        Script.stop();
+          Window.takeSnapshot();
+          deleteEntities();
       },
       
       step * STEP_TIME
     );
-
-    Script.scriptEnding.connect(
-        function () {
-            deleteEntities();
-        }
+    step += 1;
+    Script.setTimeout(
+      function () {
+          // Exit script if not running autoTester
+          if (typeof testNumber == 'undefined') {
+              Script.stop();
+          } else {
+              testNumber = localTestNumber + 1;
+          }
+      },
+      
+      step * STEP_TIME
     );
 }
 
-tests_content_entity_zone_ambientLightInheritance();
+if (typeof testNumber == 'undefined') {
+    tests_content_entity_zone_ambientLightInheritance();
+}
