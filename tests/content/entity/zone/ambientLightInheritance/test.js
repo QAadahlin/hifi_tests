@@ -1,4 +1,4 @@
-function tests_content_entity_zone_ambientLightInheritance() {
+module.exports.tests_content_entity_zone_ambientLightInheritance = function () {
     var localTestNumber = testNumber;
     
     // The models are loaded from the "MODEL_DIR_URL" located on github where we store all our test models
@@ -274,8 +274,4 @@ function tests_content_entity_zone_ambientLightInheritance() {
       
       step * STEP_TIME
     );
-}
-
-if (typeof testNumber == 'undefined') {
-    tests_content_entity_zone_ambientLightInheritance();
 }
