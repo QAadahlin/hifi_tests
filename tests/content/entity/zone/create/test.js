@@ -1,9 +1,9 @@
-function tests_content_entity_zone_create() {
+module.exports.tests_content_entity_zone_create = function () {
     var localTestNumber = testNumber;
     
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
-    Render.getConfig("RenderMainView.DrawZoneStack").enabled = true
-    Render.getConfig("RenderMainView.DrawZones").enabled = true
+    Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
+    Render.getConfig("RenderMainView.DrawZones").enabled = true;
 
     // Create the zone centered at the avatar position
     var pos = MyAvatar.position;
@@ -25,7 +25,6 @@ function tests_content_entity_zone_create() {
 
     // Add the sphere and check its properties
     var zone = Entities.addEntity(properties);
-    properties = Entities.getEntityProperties(zone);
 
     // Setup snapshots
     //    resolvePath(".") returns a string that looks like <path to High Fidelity resource folder> + "file:/" + <current folder>
@@ -45,48 +44,24 @@ function tests_content_entity_zone_create() {
           
         step * STEP_TIME
     );
-
-    step +=1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
-            
-            var newProperty = { 
-              position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-            };
-            Entities.editEntity(object, newProperty);  
-        }, 
-          
-        step * STEP_TIME
-    );
       
-    // clean up after test (done in 2 steps)
+    // Take final snapshot and clean up after test
     step += 1;
     Script.setTimeout(
       function () {
           Window.takeSnapshot();
-          deleteEntities();
-      },
-      
-      step * STEP_TIME
-    );
-    step += 1;
-    Script.setTimeout(
-      function () {
-          // Exit script if not running autoTester
-          if (typeof testNumber == 'undefined') {
-              Script.stop();
-          } else {
+          
+          Entities.deleteEntity(zone);
+          
+          Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
+          Render.getConfig("RenderMainView.DrawZones").enabled = false;
+          
+          // Advance test if running autoTester
+          if (testNumber != 0) {
               testNumber = localTestNumber + 1;
           }
       },
       
       step * STEP_TIME
     );
-}
-
-if (typeof testNumber == 'undefined') {
-    tests_content_entity_zone_create();
 }

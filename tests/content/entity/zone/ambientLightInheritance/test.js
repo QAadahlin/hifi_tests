@@ -251,25 +251,18 @@ module.exports.tests_content_entity_zone_ambientLightInheritance = function () {
       step * STEP_TIME
     )
       
-    // clean up after test (done in 2 steps)
+    // Take final snapshot and clean up after test
     step += 1;
     Script.setTimeout(
       function () {
           Window.takeSnapshot();
           deleteEntities();
-      },
-      
-      step * STEP_TIME
-    );
-    step += 1;
-    Script.setTimeout(
-      function () {
-          // Exit script if not running autoTester
-          if (typeof testNumber == 'undefined') {
-              Script.stop();
-          } else {
+
+          // Advance test if running autoTester
+          if (testNumber != 0) {
               testNumber = localTestNumber + 1;
           }
+
       },
       
       step * STEP_TIME
