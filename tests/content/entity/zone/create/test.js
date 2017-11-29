@@ -1,6 +1,6 @@
-module.exports.tests_content_entity_zone_create = function () {
-    var localTestNumber = testNumber;
-    
+module.exports.complete = false;
+
+module.exports.test = function () {
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
     Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
     Render.getConfig("RenderMainView.DrawZones").enabled = true;
@@ -56,10 +56,7 @@ module.exports.tests_content_entity_zone_create = function () {
           Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
           Render.getConfig("RenderMainView.DrawZones").enabled = false;
           
-          // Advance test if running autoTester
-          if (testNumber != 0) {
-              testNumber = localTestNumber + 1;
-          }
+          module.exports.complete = true;
       },
       
       step * STEP_TIME

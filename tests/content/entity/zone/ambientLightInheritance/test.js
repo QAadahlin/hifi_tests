@@ -1,6 +1,6 @@
-module.exports.tests_content_entity_zone_ambientLightInheritance = function () {
-    var localTestNumber = testNumber;
-    
+module.exports.complete = false;
+
+module.exports.test = function () {
     // The models are loaded from the "MODEL_DIR_URL" located on github where we store all our test models
     var MODEL_DIR_URL = "https://github.com/highfidelity/hifi_tests/blob/master/assets/models/material_matrix_models/fbx/blender/";
     var MODEL_NAME_SUFFIX = ".fbx?raw=true";
@@ -258,10 +258,7 @@ module.exports.tests_content_entity_zone_ambientLightInheritance = function () {
           Window.takeSnapshot();
           deleteEntities();
 
-          // Advance test if running autoTester
-          if (testNumber != 0) {
-              testNumber = localTestNumber + 1;
-          }
+          module.exports.complete = true;
 
       },
       

@@ -1,3 +1,3 @@
 var testNumber = 0;
-var test = Script.require("./test.js");
-test.tests_content_entity_zone_create();
+var test0 = Script.require("./test.js");
+test0.test();
