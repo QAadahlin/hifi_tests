@@ -1,4 +1,4 @@
-function tests_content_entity_zone_createMultipleZones() {
+ module.exports.tests_content_entity_zone_createMultipleZones = function() {
     var localTestNumber = testNumber;
     
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
@@ -117,21 +117,6 @@ function tests_content_entity_zone_createMultipleZones() {
         visible: true
     };
     var marker4 = Entities.addEntity(marker4properties);
-
-    function deleteEntities() {
-        Entities.deleteEntity(terrain);
-        Entities.deleteEntity(marker1);
-        Entities.deleteEntity(marker2);
-        Entities.deleteEntity(marker3);
-        Entities.deleteEntity(marker4);
-        Entities.deleteEntity(zone1);
-        Entities.deleteEntity(zone2);
-        Entities.deleteEntity(zone3);
-        Entities.deleteEntity(zone4);
-        
-        Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
-        Render.getConfig("RenderMainView.DrawZones").enabled = false;
-    }
 
     // Position avatar
     MyAvatar.position  = {x: 0.0, y: 0.0, z: -20.0};
@@ -260,31 +245,31 @@ function tests_content_entity_zone_createMultipleZones() {
         step * STEP_TIME
     );
       
-    // clean up after test (done in 2 steps)
+    // Take final snapshot and clean up after test
     step += 1;
     Script.setTimeout(
       function () {
           Window.takeSnapshot();
-          deleteEntities();
-      },
-      
-      step * STEP_TIME
-    );
-    step += 1;
-    Script.setTimeout(
-      function () {
-          // Exit script if not running autoTester
-          if (typeof testNumber == 'undefined') {
-              Script.stop();
-          } else {
+
+          Entities.deleteEntity(terrain);
+          Entities.deleteEntity(marker1);
+          Entities.deleteEntity(marker2);
+          Entities.deleteEntity(marker3);
+          Entities.deleteEntity(marker4);
+          Entities.deleteEntity(zone1);
+          Entities.deleteEntity(zone2);
+          Entities.deleteEntity(zone3);
+          Entities.deleteEntity(zone4);
+           
+          Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
+          Render.getConfig("RenderMainView.DrawZones").enabled = false;
+          
+          // Advance test if running autoTester, else clear the module and stop
+          if (testNumber != 0) {
               testNumber = localTestNumber + 1;
           }
       },
       
       step * STEP_TIME
     );
-}
-
-if (typeof testNumber == 'undefined') {
-    tests_content_entity_zone_createMultipleZones();
 }
