@@ -246,12 +246,20 @@ module.exports.test = function() {
         step * STEP_TIME
     );
       
-    // Take final snapshot and clean up after test
+    // Take final snapshot
     step += 1;
     Script.setTimeout(
       function () {
           Window.takeSnapshot();
-
+      },
+      
+      step * STEP_TIME
+    );
+      
+    // Clean up after test
+    step += 1;
+    Script.setTimeout(
+      function () {
           Entities.deleteEntity(terrain);
           Entities.deleteEntity(marker1);
           Entities.deleteEntity(marker2);

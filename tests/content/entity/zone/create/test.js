@@ -45,12 +45,10 @@ module.exports.test = function () {
         step * STEP_TIME
     );
       
-    // Take final snapshot and clean up after test
+    // Clean up after test
     step += 1;
     Script.setTimeout(
       function () {
-          Window.takeSnapshot();
-          
           Entities.deleteEntity(zone);
           
           Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;

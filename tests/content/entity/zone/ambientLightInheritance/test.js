@@ -251,15 +251,22 @@ module.exports.test = function () {
       step * STEP_TIME
     )
       
-    // Take final snapshot and clean up after test
+    // Take final snapshot
     step += 1;
     Script.setTimeout(
       function () {
           Window.takeSnapshot();
+      },
+      
+      step * STEP_TIME
+    );
+      
+    // Clean up after test
+    step += 1;
+    Script.setTimeout(
+      function () {
           deleteEntities();
-
           module.exports.complete = true;
-
       },
       
       step * STEP_TIME
