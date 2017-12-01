@@ -1,10 +1,17 @@
 module.exports.complete = false;
 
 module.exports.test = function() {
-   
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
     Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
     Render.getConfig("RenderMainView.DrawZones").enabled = true;
+    
+    // Look down Z axis
+    MyAvatar.bodyYaw = 0.0;
+    MyAvatar.bodyPitch = 0.0;
+    MyAvatar.bodyRoll = 0.0;
+    MyAvatar.headYaw = 0.0;
+    MyAvatar.headPitch = 0.0;
+    MyAvatar.headRoll = 0.0;
 
     // Create "terrain"
     var terrainProperties = {

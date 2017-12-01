@@ -5,6 +5,14 @@ module.exports.test = function () {
     Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
     Render.getConfig("RenderMainView.DrawZones").enabled = true;
 
+    // Look down Z axis
+    MyAvatar.bodyYaw = 0.0;
+    MyAvatar.bodyPitch = 0.0;
+    MyAvatar.bodyRoll = 0.0;
+    MyAvatar.headYaw = 0.0;
+    MyAvatar.headPitch = 0.0;
+    MyAvatar.headRoll = 0.0;
+
     // Create the zone centered at the avatar position
     var pos = MyAvatar.position;
 
@@ -45,7 +53,17 @@ module.exports.test = function () {
         step * STEP_TIME
     );
       
-    // Clean up after test
+    // Take final snapshot
+    step += 1;
+    Script.setTimeout(
+      function () {
+          Window.takeSnapshot();
+      },
+      
+      step * STEP_TIME
+    );
+      
+    // Take final snapshot and clean up after test
     step += 1;
     Script.setTimeout(
       function () {
