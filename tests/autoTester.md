@@ -9,10 +9,23 @@ The auto-tester is a stand alone application that provides a mechanism for regre
 A script named **deleteAllEntities.js** is provided in this folder for that purpose.
 
 ## Test File Content
-An automatic test is always named **test.js**.  This file contains a javascript module, as described below.  To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are a single line:
+An automatic test is always named **test.js**.  This file contains a javascript module, as described below.  To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
 
 ```javascript
-Script.require("./test.js").test();
+var test = Script.require("./test.js");
+test.test();
+
+// Check every second if the test is complete
+var testTimer = Script.setInterval(
+    function() {
+        if (test.complete) {
+            Script.stop();
+        }
+    },
+
+    1000
+);
+
 ```
 
 The **test.js** file itself has two requirements:

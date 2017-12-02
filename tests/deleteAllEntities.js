@@ -13,3 +13,5 @@ if (!Entities.canAdjustLocks()) {
         Entities.deleteEntity(entityList[i]);
     }
 }
+
+Script.stop();
