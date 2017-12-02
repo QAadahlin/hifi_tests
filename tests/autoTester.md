@@ -8,6 +8,8 @@ The auto-tester is a stand alone application that provides a mechanism for regre
 
 A script named **deleteAllEntities.js** is provided in this folder for that purpose.
 
+***In addition - Display should be Desktop and Fullscreen***
+
 ## Test File Content
 An automatic test is always named **test.js**.  This file contains a javascript module, as described below.  To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
 
