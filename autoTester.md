@@ -9,6 +9,13 @@ The auto-tester is a stand alone application that provides a mechanism for regre
 A script named **deleteAllEntities.js** is provided in the **tests** folder for that purpose.
 
 ## Setup
+### Windows 10
+* Clone the hifi_tests repository
+```
+git clone https://github.com/NissimHadar/hifi_tests.git
+```
+* Double click **setup.bat** to download and install autotester (Note: do not select setup.ps1 by mistake). When prompted, select folder to install autoTester (the default is usually OK).
+* ![](./setup_7z.png)
 
 ## Test File Content
 An automatic test is always named **test.js**.  This file contains a javascript module, as described below.  To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
@@ -31,8 +38,8 @@ var testTimer = Script.setInterval(
 ```
 
 The **test.js** file itself has two requirements:
-1. Export a parameterless function named test
-2. Export a boolean named complete
+1. Export a parameterless function named `test`
+2. Export a boolean named`complete`
     1. Initialized to false
     2. Set to true on completion of the test
     
