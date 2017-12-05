@@ -17,6 +17,8 @@ git clone https://github.com/NissimHadar/hifi_tests.git
 * Double click **setup.bat** to download and install autotester (Note: do not select setup.ps1 by mistake). When prompted, select folder to install autoTester (the default is usually OK).
 * ![](./setup_7z.png)
 
+The executable is located in the **autoTester/Release** folder, and is named **autoTester.exe**.
+
 ## Test File Content
 An automatic test is always named **test.js**.  This file contains a javascript module, as described below.  To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
 
