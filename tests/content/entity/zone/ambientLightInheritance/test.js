@@ -1,6 +1,8 @@
 module.exports.complete = false;
 
 module.exports.test = function () {
+    var autoTester = Script.require("../../../../utils/autoTester.js");
+    
     // The models are loaded from the "MODEL_DIR_URL" located on github where we store all our test models
     var MODEL_DIR_URL = "https://github.com/highfidelity/hifi_tests/blob/master/assets/models/material_matrix_models/fbx/blender/";
     var MODEL_NAME_SUFFIX = ".fbx?raw=true";
@@ -30,12 +32,12 @@ module.exports.test = function () {
 
     var objectName = "hifi_roughnessV00_metallicV_albedoV_ao";
     var objectProperties = {
-      type: "Model",
-      modelURL: MODEL_DIR_URL + objectName + MODEL_NAME_SUFFIX,
-      name: objectName,
-      position: objectPosition,    
-      rotation: objectOrientation,    
-      dimensions: Vec3.multiply(MODEL_SCALE, MODEL_DIMS),
+        type: "Model",
+        modelURL: MODEL_DIR_URL + objectName + MODEL_NAME_SUFFIX,
+        name: objectName,
+        position: objectPosition,    
+        rotation: objectOrientation,    
+        dimensions: Vec3.multiply(MODEL_SCALE, MODEL_DIMS),
     };
     var object = Entities.addEntity(objectProperties);
 
@@ -167,20 +169,67 @@ module.exports.test = function () {
         Entities.deleteEntity(marker3);
     }
 
-    // Setup snapshots
-    //    resolvePath(".") returns a string that looks like <path to High Fidelity resource folder> + "file:/" + <current folder>
-    //    We need the current folder
-    var combinedPath = Script.resolvePath(".");
-    var path = combinedPath.substring(combinedPath.indexOf(":") + 4);
-    Snapshot.setSnapshotsLocation(path);
-
+    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
+	
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
     var step = 1;
     Script.setTimeout(
-      function() {
-        // Give user time to move mouse cursor out of window
+        function() {
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+        }, 
+            
+        step * STEP_TIME
+    );
+
+    step += 1;
+    Script.setTimeout(
+        function() {
+            Window.takeSecondaryCameraSnapshot();
+
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 7.5};
+            
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);  
+	    }, 
+        
+        step * STEP_TIME
+    );
+
+    step += 1;
+    Script.setTimeout(
+        function() {
+            Window.takeSecondaryCameraSnapshot();
+
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 12.5};
+
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);
+        }, 
+
+        step * STEP_TIME
+    );
+
+    step += 1;
+    Script.setTimeout(
+        function() {
+            Window.takeSecondaryCameraSnapshot();
+
+            MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
+
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);  
       }, 
         
       step * STEP_TIME
@@ -188,65 +237,17 @@ module.exports.test = function () {
 
     step += 1;
     Script.setTimeout(
-      function() {
-        Window.takeSnapshot();
-
-        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
-        
-        var newProperty = { 
-          position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);  
-        
-      }, 
-        
-      step * STEP_TIME
-    );
-
-    step += 1;
-    Script.setTimeout(
-      function() {
-        Window.takeSnapshot();
-
-        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
-        
-        var newProperty = { 
-          position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);  
-      }, 
-        
-      step * STEP_TIME
-    );
-
-    step += 1;
-    Script.setTimeout(
-      function() {
-        Window.takeSnapshot();
-
-        MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
-        
-        var newProperty = { 
-          position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);  
-      }, 
-        
-      step * STEP_TIME
-    );
-
-    step += 1;
-    Script.setTimeout(
-      function() {
-        Window.takeSnapshot();
-
-        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
-        
-        var newProperty = { 
-          position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);  
-      }, 
+        function() {
+            Window.takeSecondaryCameraSnapshot();
+            
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
+            
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);  
+        }, 
         
       step * STEP_TIME
     )
@@ -254,21 +255,21 @@ module.exports.test = function () {
     // Take final snapshot
     step += 1;
     Script.setTimeout(
-      function () {
-          Window.takeSnapshot();
-      },
+        function () {
+            Window.takeSecondaryCameraSnapshot();
+        },
       
-      step * STEP_TIME
+        step * STEP_TIME
     );
       
     // Clean up after test
     step += 1;
     Script.setTimeout(
-      function () {
-          deleteEntities();
-          module.exports.complete = true;
-      },
+        function () {
+            deleteEntities();
+            module.exports.complete = true;
+        },
       
-      step * STEP_TIME
+        step * STEP_TIME
     );
 }
