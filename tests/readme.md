@@ -13,7 +13,7 @@ As of now (October 2017) we are focusing on building a concrete database of the 
 ## Test types
 We identify different types of test used for different purpose
 ### Script test
-- Must be performed by running a single script that could be automated
+- Must be performed by running a single script that could be automated - this is documented in: [autoTester.md](./autoTester.md)
 - Diagnostic is simple and should be automated asap (with output checker, or A/B images comparison)
 - Demonstrating a single feature of the overall platform engine
 - Should not rely on any UI of interface
@@ -85,8 +85,8 @@ For example:
 
 ## Script Test
 - the test.md file reference the script file and the expected result(s)
-- the script file is stored in the test case folder and runs wihtout any user interaction required.
-- the result is either a print out in the log out or and actuall snapshot of the rendering (also stored in the test case folder).
+- the script file is stored in the test case folder and runs without any user interaction required.
+- the result is either a print out in the log out or and actual snapshot of the rendering (also stored in the test case folder).
 For example: [Entity Shape Create](./content/entity/shape/create)
 
 ### Script Guidelines
