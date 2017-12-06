@@ -5,7 +5,9 @@ module.exports.test = function () {
     
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
     Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
+    Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = true;
     Render.getConfig("RenderMainView.DrawZones").enabled = true;
+    Render.getConfig("SecondaryCameraJob.DrawZones").enabled = true;
 
     // Look down Z axis
     MyAvatar.bodyYaw = 0.0;
@@ -45,7 +47,7 @@ module.exports.test = function () {
     var step = 1;
     Script.setTimeout(
         function() {
-            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+            spectatorCameraConfig.position = {x: pos.x, y: pos.y + 0.6, z: pos.z};
         }, 
           
         step * STEP_TIME
@@ -55,7 +57,7 @@ module.exports.test = function () {
     step += 1;
     Script.setTimeout(
       function () {
-          Window.takeSnapshot();
+          Window.takeSecondaryCameraSnapshot();
       },
       
       step * STEP_TIME
@@ -68,7 +70,9 @@ module.exports.test = function () {
           Entities.deleteEntity(zone);
           
           Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
+          Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
           Render.getConfig("RenderMainView.DrawZones").enabled = false;
+          Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
           
           module.exports.complete = true;
       },

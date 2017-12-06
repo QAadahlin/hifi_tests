@@ -1,9 +1,13 @@
 module.exports.complete = false;
 
 module.exports.test = function() {
+    var autoTester = Script.require("../../../../utils/autoTester.js");
+    
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
     Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
+    Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = true;
     Render.getConfig("RenderMainView.DrawZones").enabled = true;
+    Render.getConfig("SecondaryCameraJob.DrawZones").enabled = true;
     
     // Look down Z axis
     MyAvatar.bodyYaw = 0.0;
@@ -130,12 +134,8 @@ module.exports.test = function() {
     MyAvatar.position  = {x: 0.0, y: 0.0, z: -20.0};
     MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
 
-    // Setup snapshots
-    //    resolvePath(".") returns a string that looks like <path to High Fidelity resource folder> + "file:/" + <current folder>
-    //    We need the current folder
-    var combinedPath = Script.resolvePath(".");
-    var path = combinedPath.substring(combinedPath.indexOf(":") + 4);
-    Snapshot.setSnapshotsLocation(path);
+    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
 
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
@@ -143,7 +143,7 @@ module.exports.test = function() {
     var step = 1;
     Script.setTimeout(
       function() {
-        // Give user time to move mouse cursor out of window
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
       }, 
         
       step * STEP_TIME
@@ -152,7 +152,7 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: 7.0, y: 1.0, z: -19.0};
@@ -165,10 +165,12 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: 4.0, y: 1.0, z: -11.0};
+            spectatorCameraConfig.position = {x: 4.0, y: 1.0 + 0.6, z: -11.0};
+            
             MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
         }, 
           
@@ -178,10 +180,12 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: 1.0, y: 1.0, z: -5.0};
+            spectatorCameraConfig.position  = {x: 1.0, y: 1.0 + 0.6, z: -5.0};
+
             MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
         }, 
           
@@ -191,10 +195,12 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: 0.0, y: 1.0, z: 4.0};
+            spectatorCameraConfig.position  = {x: 0.0, y: 1.0 + 0.6, z: 4.0};
+
             MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
         }, 
           
@@ -204,10 +210,12 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: -4.0, y: 1.0, z: 11.0};
+            spectatorCameraConfig.position  = {x: -4.0, y: 1.0 + 0.6, z: 11.0};
+
             MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};      
         }, 
           
@@ -217,10 +225,12 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: -8.0, y: 1.0, z: 15.0};
+            spectatorCameraConfig.position  = {x: -8.0, y: 1.0 + 0.6, z: 15.0};
+
             MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};     
         }, 
           
@@ -230,10 +240,12 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: -13.0, y: 1.0, z: 16.0};
+            spectatorCameraConfig.position  = {x: -13.0, y: 1.0 + 0.6, z: 16.0};
+
             MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};  
         }, 
           
@@ -243,10 +255,12 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
         function() {
-            Window.takeSnapshot();
+            Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
             MyAvatar.position  = {x: 8.0, y: 1.0, z: 19.0};
+            spectatorCameraConfig.position  = {x: 8.0, y: 1.0 + 0.6, z: 19.0};
+
             MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};     
         }, 
           
@@ -257,7 +271,7 @@ module.exports.test = function() {
     step += 1;
     Script.setTimeout(
       function () {
-          Window.takeSnapshot();
+          Window.takeSecondaryCameraSnapshot();
       },
       
       step * STEP_TIME
@@ -278,7 +292,9 @@ module.exports.test = function() {
           Entities.deleteEntity(zone4);
            
           Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
+          Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
           Render.getConfig("RenderMainView.DrawZones").enabled = false;
+          Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
           
           module.exports.complete = true;
       },
