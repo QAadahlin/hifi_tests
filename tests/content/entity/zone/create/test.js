@@ -1,6 +1,8 @@
 module.exports.complete = false;
 
 module.exports.test = function () {
+    var autoTester = Script.require("../../../../utils/autoTester.js");
+    
     // Enabled draw zone bounding box and stack to visualize the stack of zone components
     Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
     Render.getConfig("RenderMainView.DrawZones").enabled = true;
@@ -34,12 +36,8 @@ module.exports.test = function () {
     // Add the sphere and check its properties
     var zone = Entities.addEntity(properties);
 
-    // Setup snapshots
-    //    resolvePath(".") returns a string that looks like <path to High Fidelity resource folder> + "file:/" + <current folder>
-    //    We need the current folder
-    var combinedPath = Script.resolvePath(".");
-    var path = combinedPath.substring(combinedPath.indexOf(":") + 4);
-    Snapshot.setSnapshotsLocation(path);
+    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
 
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
@@ -47,7 +45,7 @@ module.exports.test = function () {
     var step = 1;
     Script.setTimeout(
         function() {
-            // Give user time to move mouse cursor out of window
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
         }, 
           
         step * STEP_TIME
