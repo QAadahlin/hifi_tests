@@ -174,68 +174,72 @@ module.exports.test = function () {
 	
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
-    var steps = [];
-    steps[0] = function () {
-        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-    }
-    
-    steps[1] = function () {
-        Window.takeSecondaryCameraSnapshot();
-
-        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
-        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 7.5};
-        
-        var newProperty = { 
-            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);  
-    }
-    
-    steps[2] = function () {
-        Window.takeSecondaryCameraSnapshot();
-
-        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
-        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 12.5};
-
-        var newProperty = { 
-            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);
-    }
-
-    steps[3] = function () {
-         Window.takeSecondaryCameraSnapshot();
-
-        MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
-        spectatorCameraConfig.position = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
-
-        var newProperty = { 
-            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);  
-    }
-
-    steps[4] = function () {
-        Window.takeSecondaryCameraSnapshot();
-        
-        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
-        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
-        
-        var newProperty = { 
-            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-        };
-        Entities.editEntity(object, newProperty);  
-    }
-
-    steps[5] = function () {
-        Window.takeSecondaryCameraSnapshot();
-    }
-
-    steps[6] = function () {
-        deleteEntities();
-        module.exports.complete = true;
-    }
-    
     var STEP_TIME = 2000;
-    autoTester.addSteps(steps, STEP_TIME);
+
+    autoTester.addStep(false,
+        function () {
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+        },
+        STEP_TIME
+    );
+    
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 7.5};
+            
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);  
+        }, STEP_TIME
+    );
+    
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 12.5};
+
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);
+        }, STEP_TIME
+    );
+
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
+
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);  
+        }, STEP_TIME
+    );
+
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
+            
+            var newProperty = { 
+                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+            };
+            Entities.editEntity(object, newProperty);  
+        }, STEP_TIME
+    );
+
+    autoTester.addStep(true,
+        function () {
+        }, STEP_TIME
+    );
+
+    autoTester.addStep(false,
+        function () {
+            deleteEntities();
+            module.exports.complete = true;
+        }, STEP_TIME
+    );
 }

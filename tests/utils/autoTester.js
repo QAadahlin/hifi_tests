@@ -25,8 +25,22 @@ module.exports.setupSnapshots = function (combinedPath) {
     spectatorCameraConfig.orientation = MyAvatar.orientation;
 }
 
-module.exports.addSteps = function (stepFunctionArray, stepTime) {
-    for (var i = 0; i < stepFunctionArray.length; ++i) {
-        Script.setTimeout(stepFunctionArray[i], (i +1) * stepTime);
+var step = 1;
+module.exports.addStep = function (isSnapshotRequested, stepFunction, stepTime) {
+    if (isSnapshotRequested) {
+        Script.setTimeout(
+            function () {
+                Window.takeSecondaryCameraSnapshot();
+                stepFunction();
+            },
+            step * stepTime
+        );
+    } else {
+        Script.setTimeout(
+            stepFunction,
+            step * stepTime
+        );
     }
+    
+    ++step;
 }
