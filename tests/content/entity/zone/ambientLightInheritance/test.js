@@ -179,8 +179,7 @@ module.exports.test = function () {
     autoTester.addStep(false,
         function () {
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-        },
-        STEP_TIME
+        }, STEP_TIME
     );
     
     autoTester.addStep(true,
