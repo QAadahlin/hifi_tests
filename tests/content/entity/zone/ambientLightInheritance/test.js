@@ -174,11 +174,12 @@ module.exports.test = function () {
 	
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
-    function step1() {
+    var steps = [];
+    steps[0] = function () {
         spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
     }
     
-    function step2() {
+    steps[1] = function () {
         Window.takeSecondaryCameraSnapshot();
 
         MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
@@ -190,7 +191,7 @@ module.exports.test = function () {
         Entities.editEntity(object, newProperty);  
     }
     
-    function step3() {
+    steps[2] = function () {
         Window.takeSecondaryCameraSnapshot();
 
         MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
@@ -202,7 +203,7 @@ module.exports.test = function () {
         Entities.editEntity(object, newProperty);
     }
 
-    function step4() {
+    steps[3] = function () {
          Window.takeSecondaryCameraSnapshot();
 
         MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
@@ -214,7 +215,7 @@ module.exports.test = function () {
         Entities.editEntity(object, newProperty);  
     }
 
-    function step5() {
+    steps[4] = function () {
         Window.takeSecondaryCameraSnapshot();
         
         MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
@@ -226,21 +227,21 @@ module.exports.test = function () {
         Entities.editEntity(object, newProperty);  
     }
 
-    function step6() {
+    steps[5] = function () {
         Window.takeSecondaryCameraSnapshot();
     }
 
-    function step7() {
+    steps[6] = function () {
         deleteEntities();
         module.exports.complete = true;
     }
     
     var STEP_TIME = 2000;
-    autoTester.addStep(step1, STEP_TIME);
-    autoTester.addStep(step2, STEP_TIME);
-    autoTester.addStep(step3, STEP_TIME);
-    autoTester.addStep(step4, STEP_TIME);
-    autoTester.addStep(step5, STEP_TIME);
-    autoTester.addStep(step6, STEP_TIME);
-    autoTester.addStep(step7, STEP_TIME);
+    autoTester.addStep(steps[0], STEP_TIME);
+    autoTester.addStep(steps[1], STEP_TIME);
+    autoTester.addStep(steps[2], STEP_TIME);
+    autoTester.addStep(steps[3], STEP_TIME);
+    autoTester.addStep(steps[4], STEP_TIME);
+    autoTester.addStep(steps[5], STEP_TIME);
+    autoTester.addStep(steps[6], STEP_TIME);
 }
