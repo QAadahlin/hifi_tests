@@ -174,102 +174,73 @@ module.exports.test = function () {
 	
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
+    function step1() {
+        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+    }
+    
+    function step2() {
+        Window.takeSecondaryCameraSnapshot();
+
+        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
+        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 7.5};
+        
+        var newProperty = { 
+            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+        };
+        Entities.editEntity(object, newProperty);  
+    }
+    
+    function step3() {
+        Window.takeSecondaryCameraSnapshot();
+
+        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
+        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 12.5};
+
+        var newProperty = { 
+            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+        };
+        Entities.editEntity(object, newProperty);
+    }
+
+    function step4() {
+         Window.takeSecondaryCameraSnapshot();
+
+        MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
+        spectatorCameraConfig.position = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
+
+        var newProperty = { 
+            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+        };
+        Entities.editEntity(object, newProperty);  
+    }
+
+    function step5() {
+        Window.takeSecondaryCameraSnapshot();
+        
+        MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
+        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
+        
+        var newProperty = { 
+            position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
+        };
+        Entities.editEntity(object, newProperty);  
+    }
+
+    function step6() {
+        Window.takeSecondaryCameraSnapshot();
+    }
+
+    function step7() {
+        deleteEntities();
+        module.exports.complete = true;
+    }
+    
     var STEP_TIME = 2000;
-    var step = 1;
-    Script.setTimeout(
-        function() {
-            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-        }, 
-            
-        step * STEP_TIME
-    );
-
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
-            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 7.5};
-            
-            var newProperty = { 
-                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-            };
-            Entities.editEntity(object, newProperty);  
-	    }, 
-        
-        step * STEP_TIME
-    );
-
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
-            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 12.5};
-
-            var newProperty = { 
-                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-            };
-            Entities.editEntity(object, newProperty);
-        }, 
-
-        step * STEP_TIME
-    );
-
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
-            spectatorCameraConfig.position = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
-
-            var newProperty = { 
-                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-            };
-            Entities.editEntity(object, newProperty);  
-      }, 
-        
-      step * STEP_TIME
-    );
-
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-            
-            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
-            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
-            
-            var newProperty = { 
-                position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
-            };
-            Entities.editEntity(object, newProperty);  
-        }, 
-        
-      step * STEP_TIME
-    )
-      
-    // Take final snapshot
-    step += 1;
-    Script.setTimeout(
-        function () {
-            Window.takeSecondaryCameraSnapshot();
-        },
-      
-        step * STEP_TIME
-    );
-      
-    // Clean up after test
-    step += 1;
-    Script.setTimeout(
-        function () {
-            deleteEntities();
-            module.exports.complete = true;
-        },
-      
-        step * STEP_TIME
-    );
+    autoTester.addStep(step1, STEP_TIME);
+    autoTester.addStep(step2, STEP_TIME);
+    autoTester.addStep(step3, STEP_TIME);
+    autoTester.addStep(step4, STEP_TIME);
+    autoTester.addStep(step5, STEP_TIME);
+    autoTester.addStep(step6, STEP_TIME);
+    autoTester.addStep(step7, STEP_TIME);
 }

@@ -24,3 +24,11 @@ module.exports.setupSnapshots = function (combinedPath) {
     Render.getConfig("SecondaryCameraJob.ToneMapping").curve = 0;
     spectatorCameraConfig.orientation = MyAvatar.orientation;
 }
+
+var step = 1;
+
+module.exports.addStep = function (stepFunction, stepTime) {
+    Script.setTimeout(stepFunction, step * stepTime);
+    
+    step += 1;
+}
