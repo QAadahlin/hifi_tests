@@ -26,7 +26,7 @@ module.exports.test = function () {
 
     var avatarOriginPosition = MyAvatar.position;
 
-    // Place object relatively to the avatar (object will always be placed in the same relative position
+    // Place object relatively to the avatar (object will always be placed in the same relative position)
     var objectOrientation = Quat.fromPitchYawRollDegrees(0.0, 0.0, 0.0);
     var objectPosition = {x: avatarOriginPosition.x + OBJ_DX, y: avatarOriginPosition.y + OBJ_DY, z: avatarOriginPosition.z  + OBJ_DZ};
 

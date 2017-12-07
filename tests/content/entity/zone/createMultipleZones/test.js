@@ -9,29 +9,15 @@ module.exports.test = function() {
     Render.getConfig("RenderMainView.DrawZones").enabled = true;
     Render.getConfig("SecondaryCameraJob.DrawZones").enabled = true;
     
-    // Look down Z axis
-    MyAvatar.bodyYaw = 0.0;
-    MyAvatar.bodyPitch = 0.0;
-    MyAvatar.bodyRoll = 0.0;
-    MyAvatar.headYaw = 0.0;
-    MyAvatar.headPitch = 0.0;
-    MyAvatar.headRoll = 0.0;
+    var avatarOriginPosition = MyAvatar.position;
+    avatarOriginPosition.x = Math.round(avatarOriginPosition.x);
+    avatarOriginPosition.y = Math.round(avatarOriginPosition.y);
+    avatarOriginPosition.z = Math.round(avatarOriginPosition.z);
 
-    // Create "terrain"
-    var terrainProperties = {
-        type: "Box",
-        name: "terrain",
-        position: { x: 0.0, y: -1.0, z: 0.0},
-        dimensions: { x: 1000.0, y: 1.00, z: 1000.0},
-        "color": {"red":100,"green":100,"blue":100},
-        visible: true
-    };
-    var terrain = Entities.addEntity(terrainProperties);
-
-    var zone1Position = { x: 0.0, y: 0.01, z: 0.0};
-    var zone2Position = { x: 0.0, y: 0.02, z: 8.0};
-    var zone3Position = { x: 0.0, y: 0.03, z: 0.0};
-    var zone4Position = { x: 0.0, y: 0.04, z: 0.0};
+    var zone1Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.01, z: avatarOriginPosition.z + 0.0};
+    var zone2Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.02, z: avatarOriginPosition.z + 8.0};
+    var zone3Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.03, z: avatarOriginPosition.z + 0.0};
+    var zone4Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.04, z: avatarOriginPosition.z + 0.0};
 
     var zone1Dimensions = { x: 20.0, y: 10.0, z: 40.0};
     var zone2Dimensions = { x: 30.0, y: 10.0, z: 20.0};
@@ -84,11 +70,10 @@ module.exports.test = function() {
     var zone4 = Entities.addEntity(zone4properties);
 
     // Show zone positions on the ground
-
     var marker1Dimensions = { x: 20.0, y: 0.01, z: 40.0};
     var marker2Dimensions = { x: 30.0, y: 0.01, z: 20.0};
     var marker3Dimensions = { x: 10.0, y: 0.01, z: 30.0};
-    var marker4Dimensions = { x: 6.0, y: 0.01, z: 20.0};
+    var marker4Dimensions = { x:  6.0, y: 0.01, z: 20.0};
 
     var marker1properties = {
         type: "Box",
@@ -130,21 +115,21 @@ module.exports.test = function() {
     };
     var marker4 = Entities.addEntity(marker4properties);
 
-    // Position avatar
-    MyAvatar.position  = {x: 0.0, y: 0.0, z: -20.0};
-    MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
-
+    // Move avatar 20 metres back
+    MyAvatar.position.z  = avatarOriginPosition.z -20.0;
+    
     var camera = autoTester.setupSnapshots(Script.resolvePath("."));
     var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
-
+    spectatorCameraConfig.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
+    
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
     var step = 1;
     Script.setTimeout(
-      function() {
+        function() {
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-      }, 
+        }, 
         
       step * STEP_TIME
     );
@@ -155,8 +140,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: 7.0, y: 1.0, z: -19.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};        
+            MyAvatar.position  = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 19.0};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 19.0};
         }, 
           
         step * STEP_TIME
@@ -168,10 +153,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: 4.0, y: 1.0, z: -11.0};
-            spectatorCameraConfig.position = {x: 4.0, y: 1.0 + 0.6, z: -11.0};
-            
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
+            MyAvatar.position  = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 11.0};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 11.0};
         }, 
           
         step * STEP_TIME
@@ -183,10 +166,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: 1.0, y: 1.0, z: -5.0};
-            spectatorCameraConfig.position  = {x: 1.0, y: 1.0 + 0.6, z: -5.0};
-
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
+            MyAvatar.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 5.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 5.0};
         }, 
           
         step * STEP_TIME
@@ -198,10 +179,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: 0.0, y: 1.0, z: 4.0};
-            spectatorCameraConfig.position  = {x: 0.0, y: 1.0 + 0.6, z: 4.0};
-
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
+            MyAvatar.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 4.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 4.0};
         }, 
           
         step * STEP_TIME
@@ -213,10 +192,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: -4.0, y: 1.0, z: 11.0};
-            spectatorCameraConfig.position  = {x: -4.0, y: 1.0 + 0.6, z: 11.0};
-
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};      
+            MyAvatar.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 11.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 11.0};
         }, 
           
         step * STEP_TIME
@@ -228,10 +205,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: -8.0, y: 1.0, z: 15.0};
-            spectatorCameraConfig.position  = {x: -8.0, y: 1.0 + 0.6, z: 15.0};
-
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};     
+            MyAvatar.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 15.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 15.0};
         }, 
           
         step * STEP_TIME
@@ -243,10 +218,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: -13.0, y: 1.0, z: 16.0};
-            spectatorCameraConfig.position  = {x: -13.0, y: 1.0 + 0.6, z: 16.0};
-
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};  
+            MyAvatar.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 16.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 16.0};
         }, 
           
         step * STEP_TIME
@@ -258,10 +231,8 @@ module.exports.test = function() {
             Window.takeSecondaryCameraSnapshot();
 
             // Position avatar
-            MyAvatar.position  = {x: 8.0, y: 1.0, z: 19.0};
-            spectatorCameraConfig.position  = {x: 8.0, y: 1.0 + 0.6, z: 19.0};
-
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};     
+            MyAvatar.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 19.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 19.0};
         }, 
           
         step * STEP_TIME
@@ -280,24 +251,26 @@ module.exports.test = function() {
     // Clean up after test
     step += 1;
     Script.setTimeout(
-      function () {
-          Entities.deleteEntity(terrain);
-          Entities.deleteEntity(marker1);
-          Entities.deleteEntity(marker2);
-          Entities.deleteEntity(marker3);
-          Entities.deleteEntity(marker4);
-          Entities.deleteEntity(zone1);
-          Entities.deleteEntity(zone2);
-          Entities.deleteEntity(zone3);
-          Entities.deleteEntity(zone4);
-           
-          Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
-          Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
-          Render.getConfig("RenderMainView.DrawZones").enabled = false;
-          Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
+        function () {
+            Entities.deleteEntity(marker1);
+            Entities.deleteEntity(marker2);
+            Entities.deleteEntity(marker3);
+            Entities.deleteEntity(marker4);
+            Entities.deleteEntity(zone1);
+            Entities.deleteEntity(zone2);
+            Entities.deleteEntity(zone3);
+            Entities.deleteEntity(zone4);
           
-          module.exports.complete = true;
-      },
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+          
+            Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
+            Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
+            Render.getConfig("RenderMainView.DrawZones").enabled = false;
+            Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
+
+            module.exports.complete = true;
+        },
       
       step * STEP_TIME
     );
