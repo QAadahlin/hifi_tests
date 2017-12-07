@@ -2,12 +2,6 @@ module.exports.complete = false;
 
 module.exports.test = function () {
     var autoTester = Script.require("../../../../utils/autoTester.js");
-    
-    // Enabled draw zone bounding box and stack to visualize the stack of zone components
-    Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
-    Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = true;
-    Render.getConfig("RenderMainView.DrawZones").enabled = true;
-    Render.getConfig("SecondaryCameraJob.DrawZones").enabled = true;
 
     // Look down Z axis
     MyAvatar.bodyYaw = 0.0;
@@ -61,11 +55,6 @@ module.exports.test = function () {
     autoTester.addStep(false,
         function () {
             Entities.deleteEntity(zone);
-
-            Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
-            Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
-            Render.getConfig("RenderMainView.DrawZones").enabled = false;
-            Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
 
             module.exports.complete = true;
         }, STEP_TIME
