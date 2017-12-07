@@ -44,39 +44,30 @@ module.exports.test = function () {
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
-    var step = 1;
-    Script.setTimeout(
-        function() {
+
+    autoTester.addStep(false,
+        function () {
             spectatorCameraConfig.position = {x: pos.x, y: pos.y + 0.6, z: pos.z};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
       
     // Take final snapshot
-    step += 1;
-    Script.setTimeout(
-      function () {
-          Window.takeSecondaryCameraSnapshot();
-      },
-      
-      step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+        }, STEP_TIME
     );
       
-    // Take final snapshot and clean up after test
-    step += 1;
-    Script.setTimeout(
-      function () {
-          Entities.deleteEntity(zone);
-          
-          Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
-          Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
-          Render.getConfig("RenderMainView.DrawZones").enabled = false;
-          Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
-          
-          module.exports.complete = true;
-      },
-      
-      step * STEP_TIME
+    // Clean up after test
+    autoTester.addStep(false,
+        function () {
+            Entities.deleteEntity(zone);
+
+            Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
+            Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
+            Render.getConfig("RenderMainView.DrawZones").enabled = false;
+            Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
+
+            module.exports.complete = true;
+        }, STEP_TIME
     );
 }
