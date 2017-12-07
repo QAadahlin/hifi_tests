@@ -3,12 +3,6 @@ module.exports.complete = false;
 module.exports.test = function() {
     var autoTester = Script.require("../../../../utils/autoTester.js");
     
-    // Enabled draw zone bounding box and stack to visualize the stack of zone components
-    Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
-    Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = true;
-    Render.getConfig("RenderMainView.DrawZones").enabled = true;
-    Render.getConfig("SecondaryCameraJob.DrawZones").enabled = true;
-    
     var avatarOriginPosition = MyAvatar.position;
     avatarOriginPosition.x = Math.round(avatarOriginPosition.x);
     avatarOriginPosition.y = Math.round(avatarOriginPosition.y);
@@ -120,137 +114,81 @@ module.exports.test = function() {
     
     var camera = autoTester.setupSnapshots(Script.resolvePath("."));
     var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
-    spectatorCameraConfig.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
     
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
-    var step = 1;
-    Script.setTimeout(
-        function() {
+
+    autoTester.addStep(false,
+        function () {
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-        }, 
-        
-      step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+    autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 19.0};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 19.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+     autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 11.0};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 11.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+    autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 5.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 5.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
       );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+    autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 4.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 4.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+    autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 11.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 11.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+    autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 15.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 15.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+    autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 16.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 16.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSecondaryCameraSnapshot();
-
-            // Position avatar
+    autoTester.addStep(true,
+        function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 19.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 19.0};
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
       
     // Take final snapshot
-    step += 1;
-    Script.setTimeout(
-      function () {
-          Window.takeSecondaryCameraSnapshot();
-      },
-      
-      step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+        }, STEP_TIME
     );
       
     // Clean up after test
-    step += 1;
-    Script.setTimeout(
+    autoTester.addStep(true,
         function () {
             Entities.deleteEntity(marker1);
             Entities.deleteEntity(marker2);
@@ -263,15 +201,8 @@ module.exports.test = function() {
           
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-          
-            Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
-            Render.getConfig("SecondaryCameraJob.DrawZoneStack").enabled = false;
-            Render.getConfig("RenderMainView.DrawZones").enabled = false;
-            Render.getConfig("SecondaryCameraJob.DrawZones").enabled = false;
 
             module.exports.complete = true;
-        },
-      
-      step * STEP_TIME
+        }, STEP_TIME
     );
 }
