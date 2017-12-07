@@ -237,11 +237,5 @@ module.exports.test = function () {
     }
     
     var STEP_TIME = 2000;
-    autoTester.addStep(steps[0], STEP_TIME);
-    autoTester.addStep(steps[1], STEP_TIME);
-    autoTester.addStep(steps[2], STEP_TIME);
-    autoTester.addStep(steps[3], STEP_TIME);
-    autoTester.addStep(steps[4], STEP_TIME);
-    autoTester.addStep(steps[5], STEP_TIME);
-    autoTester.addStep(steps[6], STEP_TIME);
+    autoTester.addSteps(steps, STEP_TIME);
 }

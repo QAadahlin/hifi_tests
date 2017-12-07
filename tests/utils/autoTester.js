@@ -25,10 +25,8 @@ module.exports.setupSnapshots = function (combinedPath) {
     spectatorCameraConfig.orientation = MyAvatar.orientation;
 }
 
-var step = 1;
-
-module.exports.addStep = function (stepFunction, stepTime) {
-    Script.setTimeout(stepFunction, step * stepTime);
-    
-    step += 1;
+module.exports.addSteps = function (stepFunctionArray, stepTime) {
+    for (var i = 0; i < stepFunctionArray.length; ++i) {
+        Script.setTimeout(stepFunctionArray[i], (i +1) * stepTime);
+    }
 }
