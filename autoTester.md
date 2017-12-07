@@ -6,7 +6,19 @@ The auto-tester is a stand alone application that provides a mechanism for regre
 
 ***Please note that before running any test that the world must be empty and all scripts must have been stopped.***
 
-A script named **deleteAllEntities.js** is provided in the **tests** folder for that purpose.
+A script named **deleteAllEntities.js** is provided in the **tests/utils** folder for that purpose.
+
+##autoTester.js
+Another script in the **tests/utils** folder is **autoTester.js**.
+
+This script is a module that exposes two functions.
+### setupSnapshots.js
+This function hides the avatar, sets its orientation to 0, sets the snapshots folder and sets up the secondary camera.  The secondary camera is used to take snapshots so that the snapshot size will be independent of the user's monitor.
+###addStep
+This function adds a step to the test and accepts 3 parameters:
+1.  boolean defining whether or not to take a snapshot at the beginning of the test (i.e. - the result of the _previous step_).
+2.  a function defining the step itself
+3.  the step time.  This time is multiplied by the step number to set the timeout.  It is suggested that this is fixed at a value like 2000 (in millseconds), so each step will run after another 2 seconds.
 
 ## Setup
 ### Windows 10
@@ -63,11 +75,8 @@ module.exports.test = function() {
     // Add some entities...
 
     // Setup snapshots
-    //    resolvePath(".") returns a string that looks like <path to High Fidelity resource folder> + "file:/" + <current folder>
-    //    We need the current folder
-    var combinedPath = Script.resolvePath(".");
-    var path = combinedPath.substring(combinedPath.indexOf(":") + 4);
-    Snapshot.setSnapshotsLocation(path);
+    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
 
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
@@ -81,59 +90,39 @@ module.exports.test = function() {
       step * STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
+    // First step just locates the spectator camera 
+    autoTester.addStep(false,
+	    function () {
+	        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+	    }, STEP_TIME
+	);
 
-            // Do something
-        }, 
-          
-        step * STEP_TIME
-    );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
+    autoTester.addStep(true,
+        function () {
             // Do something else
-        }, 
-          
-        step * STEP_TIME
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Do the last thing
-        }, 
-          
-        step * STEP_TIME
-      );
+    autoTester.addStep(true,
+        function () {
+            // Do something else
+        }, STEP_TIME
+    );
       
     // Take final snapshot
-    step += 1;
-    Script.setTimeout(
-      function () {
-          Window.takeSnapshot();
-      },
-      
-      step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+        }, STEP_TIME
     );
       
     // Clean up after test
-    step += 1;
-    Script.setTimeout(
-      function () {
-          // delete entities and any other cleanup
+    autoTester.addStep(false,
+        function () {
+            // delete entities and any other cleanup
           
-          module.exports.complete = true;
-      },
-      
-      step * STEP_TIME
+            module.exports.complete = true;
+        }, STEP_TIME
     );
 }
 
