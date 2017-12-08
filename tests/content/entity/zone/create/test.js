@@ -32,7 +32,7 @@ module.exports.test = function () {
     // Add the sphere and check its properties
     var zone = Entities.addEntity(properties);
 
-    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
+    autoTester.setupSnapshots(Script.resolvePath("."));
     var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
 
     // Note that the image for the current step is snapped at the beginning of the next step.
