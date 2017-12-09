@@ -1,6 +1,6 @@
 module.exports.complete = false;
 
-module.exports.test = function () {
+module.exports.test = function (testType) {
     var autoTester = Script.require("../../../../utils/autoTester.js");
 
     // Load terrain
@@ -62,6 +62,7 @@ module.exports.test = function () {
     var steps = [
         function () {
         },
+        
         // Turn on haze and set range to 15K and 
         function () {
             var newProperty = { 
@@ -96,7 +97,7 @@ module.exports.test = function () {
 
         },
         
-        // Set ceiling to 500 and 
+        // Set ceiling to 500
         function () {
             var newProperty = { 
                 haze: {
@@ -107,7 +108,7 @@ module.exports.test = function () {
 
         },
         
-        // Set base to -400 and then back to 0
+        // Set base to -400
         function () {
             var newProperty = { 
                 haze: {
@@ -174,6 +175,7 @@ module.exports.test = function () {
             Entities.editEntity(sky, newProperty);  
 
         },
+        
         function () {
             Entities.deleteEntity(terrain);
             Entities.deleteEntity(sky);
@@ -182,17 +184,30 @@ module.exports.test = function () {
         }
     ];
     
-    var i = 0;
-    autoTester.addStep(false, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);  
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-    autoTester.addStep(true, steps[i++], STEP_TIME);
-}
+    if (testType  == "auto") {
+        autoTester.addStep(false, steps[0], STEP_TIME);
+        autoTester.addStep(true, steps[1], STEP_TIME);
+        autoTester.addStep(true, steps[2], STEP_TIME);
+        autoTester.addStep(true, steps[3], STEP_TIME);
+        autoTester.addStep(true, steps[4], STEP_TIME);
+        autoTester.addStep(true, steps[5], STEP_TIME);
+        autoTester.addStep(true, steps[6], STEP_TIME);
+        autoTester.addStep(true, steps[7], STEP_TIME);
+        autoTester.addStep(true, steps[8], STEP_TIME);  
+        autoTester.addStep(true, steps[9], STEP_TIME);
+        autoTester.addStep(true, steps[10], STEP_TIME);
+        autoTester.addStep(true, steps[11], STEP_TIME);
+    } else {
+        var _step = 0;
+        Controller.keyPressEvent.connect(
+            function(event){
+                if (event.key == 32) {
+                    print("Running step " + (_step + 1));
+                    steps[_step]();
+                    _step++;
+                    _step = Math.min(_step, steps.length-1);
+                }
+            }
+        );
+    }
+};
