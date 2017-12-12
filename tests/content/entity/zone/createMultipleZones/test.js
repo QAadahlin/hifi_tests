@@ -1,33 +1,17 @@
 module.exports.complete = false;
 
 module.exports.test = function() {
-    // Enabled draw zone bounding box and stack to visualize the stack of zone components
-    Render.getConfig("RenderMainView.DrawZoneStack").enabled = true;
-    Render.getConfig("RenderMainView.DrawZones").enabled = true;
+    var autoTester = Script.require("../../../../utils/autoTester.js");
     
-    // Look down Z axis
-    MyAvatar.bodyYaw = 0.0;
-    MyAvatar.bodyPitch = 0.0;
-    MyAvatar.bodyRoll = 0.0;
-    MyAvatar.headYaw = 0.0;
-    MyAvatar.headPitch = 0.0;
-    MyAvatar.headRoll = 0.0;
+    var avatarOriginPosition = MyAvatar.position;
+    avatarOriginPosition.x = Math.round(avatarOriginPosition.x);
+    avatarOriginPosition.y = Math.round(avatarOriginPosition.y);
+    avatarOriginPosition.z = Math.round(avatarOriginPosition.z);
 
-    // Create "terrain"
-    var terrainProperties = {
-        type: "Box",
-        name: "terrain",
-        position: { x: 0.0, y: -1.0, z: 0.0},
-        dimensions: { x: 1000.0, y: 1.00, z: 1000.0},
-        "color": {"red":100,"green":100,"blue":100},
-        visible: true
-    };
-    var terrain = Entities.addEntity(terrainProperties);
-
-    var zone1Position = { x: 0.0, y: 0.01, z: 0.0};
-    var zone2Position = { x: 0.0, y: 0.02, z: 8.0};
-    var zone3Position = { x: 0.0, y: 0.03, z: 0.0};
-    var zone4Position = { x: 0.0, y: 0.04, z: 0.0};
+    var zone1Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.01, z: avatarOriginPosition.z + 0.0};
+    var zone2Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.02, z: avatarOriginPosition.z + 8.0};
+    var zone3Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.03, z: avatarOriginPosition.z + 0.0};
+    var zone4Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.04, z: avatarOriginPosition.z + 0.0};
 
     var zone1Dimensions = { x: 20.0, y: 10.0, z: 40.0};
     var zone2Dimensions = { x: 30.0, y: 10.0, z: 20.0};
@@ -80,11 +64,10 @@ module.exports.test = function() {
     var zone4 = Entities.addEntity(zone4properties);
 
     // Show zone positions on the ground
-
     var marker1Dimensions = { x: 20.0, y: 0.01, z: 40.0};
     var marker2Dimensions = { x: 30.0, y: 0.01, z: 20.0};
     var marker3Dimensions = { x: 10.0, y: 0.01, z: 30.0};
-    var marker4Dimensions = { x: 6.0, y: 0.01, z: 20.0};
+    var marker4Dimensions = { x:  6.0, y: 0.01, z: 20.0};
 
     var marker1properties = {
         type: "Box",
@@ -126,163 +109,100 @@ module.exports.test = function() {
     };
     var marker4 = Entities.addEntity(marker4properties);
 
-    // Position avatar
-    MyAvatar.position  = {x: 0.0, y: 0.0, z: -20.0};
-    MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
-
-    // Setup snapshots
-    //    resolvePath(".") returns a string that looks like <path to High Fidelity resource folder> + "file:/" + <current folder>
-    //    We need the current folder
-    var combinedPath = Script.resolvePath(".");
-    var path = combinedPath.substring(combinedPath.indexOf(":") + 4);
-    Snapshot.setSnapshotsLocation(path);
-
+    // Move avatar 20 metres back
+    MyAvatar.position.z  = avatarOriginPosition.z -20.0;
+    
+    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
+    
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
-    var step = 1;
-    Script.setTimeout(
-      function() {
-        // Give user time to move mouse cursor out of window
-      }, 
-        
-      step * STEP_TIME
+
+    autoTester.addStep(false,
+        function () {
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: 7.0, y: 1.0, z: -19.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};        
-        }, 
-          
-        step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 19.0};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 19.0};
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: 4.0, y: 1.0, z: -11.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
-        }, 
-          
-        step * STEP_TIME
+     autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 11.0};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 11.0};
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: 1.0, y: 1.0, z: -5.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
-        }, 
-          
-        step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 5.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 5.0};
+        }, STEP_TIME
       );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: 0.0, y: 1.0, z: 4.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};
-        }, 
-          
-        step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 4.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 4.0};
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: -4.0, y: 1.0, z: 11.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};      
-        }, 
-          
-        step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 11.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 11.0};
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: -8.0, y: 1.0, z: 15.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};     
-        }, 
-          
-        step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 15.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 15.0};
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: -13.0, y: 1.0, z: 16.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};  
-        }, 
-          
-        step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 16.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 16.0};
+        }, STEP_TIME
     );
 
-    step += 1;
-    Script.setTimeout(
-        function() {
-            Window.takeSnapshot();
-
-            // Position avatar
-            MyAvatar.position  = {x: 8.0, y: 1.0, z: 19.0};
-            MyAvatar.orientation = {x: 0.0, y: 1.0, z: 0.0, w: 0.0};     
-        }, 
-          
-        step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+            MyAvatar.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 19.0};
+            spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 19.0};
+        }, STEP_TIME
     );
       
     // Take final snapshot
-    step += 1;
-    Script.setTimeout(
-      function () {
-          Window.takeSnapshot();
-      },
-      
-      step * STEP_TIME
+    autoTester.addStep(true,
+        function () {
+        }, STEP_TIME
     );
       
     // Clean up after test
-    step += 1;
-    Script.setTimeout(
-      function () {
-          Entities.deleteEntity(terrain);
-          Entities.deleteEntity(marker1);
-          Entities.deleteEntity(marker2);
-          Entities.deleteEntity(marker3);
-          Entities.deleteEntity(marker4);
-          Entities.deleteEntity(zone1);
-          Entities.deleteEntity(zone2);
-          Entities.deleteEntity(zone3);
-          Entities.deleteEntity(zone4);
-           
-          Render.getConfig("RenderMainView.DrawZoneStack").enabled = false;
-          Render.getConfig("RenderMainView.DrawZones").enabled = false;
+    autoTester.addStep(true,
+        function () {
+            Entities.deleteEntity(marker1);
+            Entities.deleteEntity(marker2);
+            Entities.deleteEntity(marker3);
+            Entities.deleteEntity(marker4);
+            Entities.deleteEntity(zone1);
+            Entities.deleteEntity(zone2);
+            Entities.deleteEntity(zone3);
+            Entities.deleteEntity(zone4);
           
-          module.exports.complete = true;
-      },
-      
-      step * STEP_TIME
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z};
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
+
+            module.exports.complete = true;
+        }, STEP_TIME
     );
 }
