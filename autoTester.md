@@ -14,7 +14,7 @@ Another script in the **tests/utils** folder is **autoTester.js**.
 This script is a module that exposes two functions.
 ### setupSnapshots.js
 This function hides the avatar, sets its orientation to 0, sets the snapshots folder and sets up the secondary camera.  The secondary camera is used to take snapshots so that the snapshot size will be independent of the user's monitor.
-###addStep
+### addStep
 This function adds a step to the test and accepts 3 parameters:
 1.  boolean defining whether or not to take a snapshot at the beginning of the test (i.e. - the result of the _previous step_).
 2.  a function defining the step itself
@@ -30,27 +30,12 @@ git clone https://github.com/NissimHadar/hifi_tests.git
 * ![](./setup_7z.png)
 
 The executable is located in the **autoTester/Release** folder, and is named **autoTester.exe**.
+This will also download content for the tests, located in **autoTester/Resources**.
 
 ## Test File Content
-An automatic test is always named **test.js**.  This file contains a javascript module, as described below.  To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
-
-```javascript
-var test = Script.require("./test.js");
-test.test();
-
-// Check every second if the test is complete
-var testTimer = Script.setInterval(
-    function() {
-        if (test.complete) {
-            Script.stop();
-        }
-    },
-
-    1000
-);
-
-```
-
+### test.js
+An automatic test is always named **test.js**.  This file contains a javascript module, as described below.  
+#### test.js details
 The **test.js** file itself has two requirements:
 1. Export a parameterless function named `test`
 2. Export a boolean named`complete`
@@ -81,51 +66,76 @@ module.exports.test = function() {
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
-    var step = 1;
-    Script.setTimeout(
-      function() {
-        // Give user time to move mouse cursor out of window
-      }, 
         
-      step * STEP_TIME
-    );
-
-    // First step just locates the spectator camera 
-    autoTester.addStep(false,
-	    function () {
-	        spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-	    }, STEP_TIME
-	);
-
-
-    autoTester.addStep(true,
+    // An array of tests is created.  These may be called via the timing mechanism for auto-testing,
+    // or stepped through with the space bar
+    var steps = [
+        // Turn on haze and set range to 15K and 
         function () {
-            // Do something else
-        }, STEP_TIME
-    );
+            var newProperty = { 
+                hazeMode: "enabled",
+                haze: {
+                    hazeRange: 15000.0
+                }
+            };
+            Entities.editEntity(sky, newProperty);  
 
-    autoTester.addStep(true,
+        },
+        
+        // Set range to 8K and 
         function () {
-            // Do something else
-        }, STEP_TIME
-    );
-      
-    // Take final snapshot
-    autoTester.addStep(true,
-        function () {
-        }, STEP_TIME
-    );
-      
-    // Clean up after test
-    autoTester.addStep(false,
-        function () {
-            // delete entities and any other cleanup
-          
-            module.exports.complete = true;
-        }, STEP_TIME
-    );
-}
+            var newProperty = { 
+                haze: {
+                    hazeRange: 8000.0
+                }
+            };
+            Entities.editEntity(sky, newProperty);  
 
+        }
+    ]
+    
+    var i = 0;
+    if (testType  == "auto") {
+        autoTester.addStep(false, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+     } else {
+        Controller.keyPressEvent.connect(
+            function(event){
+                if (event.key == 32) {
+                    print("Running step " + (i + 1));
+                    steps[i++]();
+                    i = Math.min(i, steps.length-1);
+                }
+            }
+        );
+    }
+};
+```
+### runTest.js
+To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
+
+```javascript
+var test = Script.require("./test.js");
+test.test();
+
+// Check every second if the test is complete
+var testTimer = Script.setInterval(
+    function() {
+        if (test.complete) {
+            Script.stop();
+        }
+    },
+
+    1000
+);
+
+```
+### runTestStepByStep.js
+
+An additional script is provided for single-stepping through the tests.  The space-bar is used for stepping, and the step number is printed to the console (CTRL+SHIFT+l).  This file is called **runTestStepByStep.js** and its contents are as follows:
+```
+var test = Script.require("./test.js");
+test.test("step by step");
 ```
 ## Using the auto-tester
 The auto-tester provides the following 4 functions:
