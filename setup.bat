@@ -5,11 +5,11 @@ IF EXIST tools\autoTester\NUL (
     RMDIR /S /Q tools\autoTester
 )
 
-REM get autoTester executable zip from Amazon S3 (called Release.exe
+REM get autoTester executable zip from Amazon S3 (called Release.exe)
 cd tools
 mkdir autoTester
 cd autoTester
-mkdir resources
+mkdir Resources
 cd ..
 
 PowerShell.exe -ExecutionPolicy Bypass -Command "& '%~dpn0.ps1'"
