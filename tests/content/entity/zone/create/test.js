@@ -1,6 +1,6 @@
 module.exports.complete = false;
 
-module.exports.test = function () {
+module.exports.test = function (testType) {
     var autoTester = Script.require("../../../../utils/autoTester.js");
 
     // Look down Z axis
@@ -38,25 +38,40 @@ module.exports.test = function () {
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
-
-    autoTester.addStep(false,
+    
+    // An array of tests is created.  These may be called via the timing mechanism for auto-testing,
+    // or stepped through with the space bar
+    var steps = [
         function () {
             spectatorCameraConfig.position = {x: pos.x, y: pos.y + 0.6, z: pos.z};
-        }, STEP_TIME
-    );
-      
-    // Take final snapshot
-    autoTester.addStep(true,
+        },
+        
+        // Take snapshot
         function () {
-        }, STEP_TIME
-    );
-      
-    // Clean up after test
-    autoTester.addStep(false,
+        },
+        
+        // Clean up after test
         function () {
             Entities.deleteEntity(zone);
 
             module.exports.complete = true;
-        }, STEP_TIME
-    );
-}
+        }
+    ]
+    
+    var i = 0;
+    if (testType  == "auto") {
+        autoTester.addStep(false, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(false, steps[i++], STEP_TIME);
+    } else {
+        Controller.keyPressEvent.connect(
+            function(event){
+                if (event.key == 32) {
+                    print("Running step " + (i + 1));
+                    steps[i++]();
+                    i = Math.min(i, steps.length-1);
+                }
+            }
+        );
+    }
+};

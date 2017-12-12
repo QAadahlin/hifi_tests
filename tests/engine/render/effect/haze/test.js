@@ -184,28 +184,27 @@ module.exports.test = function (testType) {
         }
     ];
     
+    var i = 0;
     if (testType  == "auto") {
-        autoTester.addStep(false, steps[0], STEP_TIME);
-        autoTester.addStep(true, steps[1], STEP_TIME);
-        autoTester.addStep(true, steps[2], STEP_TIME);
-        autoTester.addStep(true, steps[3], STEP_TIME);
-        autoTester.addStep(true, steps[4], STEP_TIME);
-        autoTester.addStep(true, steps[5], STEP_TIME);
-        autoTester.addStep(true, steps[6], STEP_TIME);
-        autoTester.addStep(true, steps[7], STEP_TIME);
-        autoTester.addStep(true, steps[8], STEP_TIME);  
-        autoTester.addStep(true, steps[9], STEP_TIME);
-        autoTester.addStep(true, steps[10], STEP_TIME);
-        autoTester.addStep(true, steps[11], STEP_TIME);
+        autoTester.addStep(false, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);  
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
     } else {
-        var _step = 0;
         Controller.keyPressEvent.connect(
             function(event){
                 if (event.key == 32) {
-                    print("Running step " + (_step + 1));
-                    steps[_step]();
-                    _step++;
-                    _step = Math.min(_step, steps.length-1);
+                    print("Running step " + (i + 1));
+                    steps[i++]();
+                    i = Math.min(i, steps.length-1);
                 }
             }
         );

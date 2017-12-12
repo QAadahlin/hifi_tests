@@ -1,6 +1,6 @@
 module.exports.complete = false;
 
-module.exports.test = function() {
+module.exports.test = function(testType) {
     var autoTester = Script.require("../../../../utils/autoTester.js");
     
     var avatarOriginPosition = MyAvatar.position;
@@ -118,77 +118,59 @@ module.exports.test = function() {
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
-
-    autoTester.addStep(false,
+    
+    // An array of tests is created.  These may be called via the timing mechanism for auto-testing,
+    // or stepped through with the space bar
+    var steps = [
         function () {
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 19.0};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x + 7.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 19.0};
-        }, STEP_TIME
-    );
-
-     autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 11.0};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x + 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 11.0};
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z - 5.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 1.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z - 5.0};
-        }, STEP_TIME
-      );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 4.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 0.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 4.0};
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 11.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 4.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 11.0};
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 15.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 15.0};
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 16.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x - 13.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 16.0};
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0, z: avatarOriginPosition.z + 19.0};
             spectatorCameraConfig.position  = {x: avatarOriginPosition.x + 8.0, y: avatarOriginPosition.y + 1.0 + 0.6, z: avatarOriginPosition.z + 19.0};
-        }, STEP_TIME
-    );
-      
-    // Take final snapshot
-    autoTester.addStep(true,
+        },
+        
+        // Take final snapshot
         function () {
-        }, STEP_TIME
-    );
-      
-    // Clean up after test
-    autoTester.addStep(true,
+        },
+        
+        // Clean up after test
         function () {
             Entities.deleteEntity(marker1);
             Entities.deleteEntity(marker2);
@@ -203,6 +185,31 @@ module.exports.test = function() {
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
 
             module.exports.complete = true;
-        }, STEP_TIME
-    );
-}
+        }
+    ]
+    
+    var i = 0;
+    if (testType  == "auto") {
+        autoTester.addStep(false, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+    } else {
+        Controller.keyPressEvent.connect(
+            function(event){
+                if (event.key == 32) {
+                    print("Running step " + (i + 1));
+                    steps[i++]();
+                    i = Math.min(i, steps.length-1);
+                }
+            }
+        );
+    }
+};

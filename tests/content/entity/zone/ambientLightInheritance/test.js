@@ -1,6 +1,6 @@
 module.exports.complete = false;
 
-module.exports.test = function () {
+module.exports.test = function (testType) {
     var autoTester = Script.require("../../../../utils/autoTester.js");
     
     // The models are loaded from the "MODEL_DIR_URL" located on github where we store all our test models
@@ -175,14 +175,14 @@ module.exports.test = function () {
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
-
-    autoTester.addStep(false,
+    
+    // An array of tests is created.  These may be called via the timing mechanism for auto-testing,
+    // or stepped through with the space bar
+    var steps = [
         function () {
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
-        }, STEP_TIME
-    );
-    
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 7.5};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 7.5};
@@ -191,10 +191,8 @@ module.exports.test = function () {
                 position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
             };
             Entities.editEntity(object, newProperty);  
-        }, STEP_TIME
-    );
-    
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 12.5};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 12.5};
@@ -203,10 +201,8 @@ module.exports.test = function () {
                 position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
             };
             Entities.editEntity(object, newProperty);
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x + 3.0, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
@@ -215,10 +211,8 @@ module.exports.test = function () {
                 position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
             };
             Entities.editEntity(object, newProperty);  
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 17.5};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 17.5};
@@ -227,18 +221,35 @@ module.exports.test = function () {
                 position: {x: MyAvatar.position.x + OBJ_DX, y: MyAvatar.position.y + OBJ_DY, z: MyAvatar.position.z + OBJ_DZ}
             };
             Entities.editEntity(object, newProperty);  
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(true,
+        },
+        
         function () {
-        }, STEP_TIME
-    );
-
-    autoTester.addStep(false,
+        },
+        
         function () {
             deleteEntities();
             module.exports.complete = true;
-        }, STEP_TIME
-    );
-}
+        }
+    ]
+    
+    var i = 0;
+    if (testType  == "auto") {
+        autoTester.addStep(false, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(false, steps[i++], STEP_TIME);
+    } else {
+        Controller.keyPressEvent.connect(
+            function(event){
+                if (event.key == 32) {
+                    print("Running step " + (i + 1));
+                    steps[i++]();
+                    i = Math.min(i, steps.length-1);
+                }
+            }
+        );
+    }
+};
