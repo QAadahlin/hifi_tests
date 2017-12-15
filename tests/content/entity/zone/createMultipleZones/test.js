@@ -4,9 +4,6 @@ module.exports.test = function(testType) {
     var autoTester = Script.require("../../../../utils/autoTester.js");
     
     var avatarOriginPosition = MyAvatar.position;
-    avatarOriginPosition.x = Math.round(avatarOriginPosition.x);
-    avatarOriginPosition.y = Math.round(avatarOriginPosition.y);
-    avatarOriginPosition.z = Math.round(avatarOriginPosition.z);
 
     var zone1Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.01, z: avatarOriginPosition.z + 0.0};
     var zone2Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.02, z: avatarOriginPosition.z + 8.0};

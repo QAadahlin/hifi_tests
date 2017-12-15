@@ -112,7 +112,7 @@ module.exports.test = function() {
 };
 ```
 ### runTest.js
-To enable manual execution of the test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
+To enable automatic execution of a test, another file must be present that calls the module.  The contents of this file are fixed, and it is suggested to name it **runTest.js**.  The contents of the file are as follows:
 
 ```javascript
 var test = Script.require("./test.js");
@@ -155,7 +155,7 @@ Evaluating a test is performed after running a **test.js** script to create new 
 This is a recursive version of the previous function.  Auto-tester will recurse through all folders from the selected folder.  A test will be evaluated if the following is true:
 * The folder contains a **test.js** script
 * The number of actual and expected snapshots is the same (see Create Test for an explanation)
-## Create a recursive test script
+### Create a recursive test script
 Auto-tester will create a script named **allTests.js** that will call all **test.js** scripts found in the folder, and any subfolders.  An example of the script created is:
 ```
 // This is an automatically generated file, created by auto-tester
@@ -207,4 +207,4 @@ Script.scriptEnding.connect(
 );
 ```
 ### Create a Test Case
-A test case is created after running the test script.  Running the script produces a series of snapshots, named **hifi-snap-by_**_user name_**-on-YYYY-MM-DD_HH-MM-SS.jpg**.  This function simply renames these files to **ExpectedImage_1.jpg**, **ExpectedImage_2.jpg** and so on.  These files can be added to version control as they are a fixed asset of the test.
+A test case is created after running the test script.  Running the script produces a series of snapshots, named **hifi-snap-by-**_user name_**-on-YYYY-MM-DD_HH-MM-SS.jpg**.  This function simply renames these files to **ExpectedImage_1.jpg**, **ExpectedImage_2.jpg** and so on.  These files can be added to version control as they are a fixed asset of the test.
