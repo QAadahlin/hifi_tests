@@ -76,6 +76,16 @@ module.exports.test = function (testType) {
         position: {x: MyAvatar.position.x - 100.0, y: MyAvatar.position.y, z: MyAvatar.position.z},
     });
 
+    var OBJECT_URL = Script.resolvePath(prefix + '../tools/autoTester/resources/hifi_opacityV_albedoM_ao.fbx');
+    var object = Entities.addEntity({
+        type: "Model",
+        name: 'Object',
+        shapeType: 'none',
+        modelURL: OBJECT_URL,
+        dimensions: { x: 0.60706767439842225, y: 0.7496767491102219, z: 0.606962844729423525 },
+        position: {x: MyAvatar.position.x - 20.0, y: MyAvatar.position.y, z: MyAvatar.position.z + 3.0},
+    });
+    
 	spectatorCameraConfig.position = {x: MyAvatar.position.x, y: MyAvatar.position.y + 0.6, z: MyAvatar.position.z};
     
     // Note that the image for the current step is snapped at the beginning of the next step.
@@ -100,101 +110,36 @@ module.exports.test = function (testType) {
 
         },
         
-        // Set range to 8K and 
+        // Set range to 1500 and 
         function () {
             var newProperty = { 
+                hazeMode: "enabled",
                 haze: {
-                    hazeRange: 8000.0
+                    hazeRange: 1500.0
                 }
             };
             Entities.editEntity(sky, newProperty);  
 
         },
         
-        // Turn on altitude effect
+        // Set range to 150 and 
         function () {
             var newProperty = { 
+                hazeMode: "enabled",
                 haze: {
-                    hazeAltitudeEffect: 1
+                    hazeRange: 150.0
                 }
             };
             Entities.editEntity(sky, newProperty);  
 
         },
         
-        // Set ceiling to 500
+        // Set range to 15 and 
         function () {
             var newProperty = { 
+                hazeMode: "enabled",
                 haze: {
-                    hazeCeiling: 500.0
-                }
-            };
-            Entities.editEntity(sky, newProperty);  
-
-        },
-        
-        // Set base to -400
-        function () {
-            var newProperty = { 
-                haze: {
-                    hazeBaseRef: -400.0
-                }
-            };
-            Entities.editEntity(sky, newProperty);  
-
-        },
-        
-        // Set base to 0 and colour sandy
-        function () {
-            var newProperty = { 
-                haze: {
-                    hazeBaseRef: 0.0,
-                    hazeColor:{"red":153,"green":107,"blue":47}
-                }
-            };
-            Entities.editEntity(sky, newProperty);  
-
-        },
-        
-        // Set background blend to 1, then back to 0
-        function () {
-            var newProperty = { 
-                haze: {
-                    hazeBackgroundBlend: 1.0
-                }
-            };
-            Entities.editEntity(sky, newProperty);  
-
-        },
-        function () {
-            var newProperty = { 
-                haze: {
-                    hazeBackgroundBlend: 0.0
-                }
-            };
-            Entities.editEntity(sky, newProperty);  
-
-        },
-    
-        // Test glare effect (sun is 15 degrees elevation, 095 azimuth)
-        function () {
-            var newProperty = {
-                keyLight: {
-                    direction:{"x":0.9622501869, "y":-0.2588190451, "z":-0.08418598283}
-                },
-                haze: {
-                    hazeCeiling: 5000.0,
-                    hazeEnableGlare: 1,
-                    hazeGlareColor:{"red":176,"green":25,"blue":68},
-                }
-            };
-            Entities.editEntity(sky, newProperty);  
-
-        },
-        function () {
-            var newProperty = { 
-                haze: {
-                    hazeGlareAngle: 5
+                    hazeRange: 15.0
                 }
             };
             Entities.editEntity(sky, newProperty);  
@@ -204,6 +149,8 @@ module.exports.test = function (testType) {
         function () {
             Entities.deleteEntity(terrain);
             Entities.deleteEntity(sky);
+            Entities.deleteEntity(tree);
+            Entities.deleteEntity(object);
             
             module.exports.complete = true;
         }
@@ -214,12 +161,6 @@ module.exports.test = function (testType) {
         autoTester.addStep(false, steps[i++], STEP_TIME);
         autoTester.addStep(true, steps[i++], STEP_TIME);
         autoTester.addStep(true, steps[i++], STEP_TIME);
-        autoTester.addStep(true, steps[i++], STEP_TIME);
-        autoTester.addStep(true, steps[i++], STEP_TIME);
-        autoTester.addStep(true, steps[i++], STEP_TIME);
-        autoTester.addStep(true, steps[i++], STEP_TIME);
-        autoTester.addStep(true, steps[i++], STEP_TIME);
-        autoTester.addStep(true, steps[i++], STEP_TIME);  
         autoTester.addStep(true, steps[i++], STEP_TIME);
         autoTester.addStep(true, steps[i++], STEP_TIME);
         autoTester.addStep(true, steps[i++], STEP_TIME);
