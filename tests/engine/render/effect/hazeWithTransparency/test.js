@@ -26,7 +26,11 @@ module.exports.test = function (testType) {
      
     // Look down X axis
     MyAvatar.bodyYaw = 90.0;
+    MyAvatar.bodyPitch = 0.0;
+    MyAvatar.bodyRoll = 0.0;
     MyAvatar.headYaw = 90.0;
+    MyAvatar.headPitch = 0.0;
+    MyAvatar.headRoll = 0.0;
     spectatorCameraConfig.orientation = { x: 0.0, y: 0.7071, z: 0.0, w: 0.7071 };
    
     // Load models
@@ -84,6 +88,11 @@ module.exports.test = function (testType) {
         modelURL: OBJECT_URL,
         dimensions: { x: 0.60706767439842225, y: 0.7496767491102219, z: 0.606962844729423525 },
         position: {x: MyAvatar.position.x - 20.0, y: MyAvatar.position.y, z: MyAvatar.position.z + 3.0},
+    });
+    
+    var overlay = Overlays.addOverlay("model", {
+        url: OBJECT_URL,
+        position: {x: MyAvatar.position.x - 6.0, y: MyAvatar.position.y, z: MyAvatar.position.z + 2.0}
     });
     
 	spectatorCameraConfig.position = {x: MyAvatar.position.x, y: MyAvatar.position.y + 0.6, z: MyAvatar.position.z};
@@ -151,6 +160,7 @@ module.exports.test = function (testType) {
             Entities.deleteEntity(sky);
             Entities.deleteEntity(tree);
             Entities.deleteEntity(object);
+            Overlays.deleteOverlay(overlay);
             
             module.exports.complete = true;
         }
