@@ -23,12 +23,13 @@ module.exports.test = function (testType) {
     var autoTester = Script.require(prefix + "utils/autoTester.js");
     var camera = autoTester.setupSnapshots(combinedPath);
     var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
-    
-    // Load terrain
-    var position =  MyAvatar.position;
-    position.x = position.x - 5000.0;
-    position.y = position.y + 20.0;
-
+     
+    // Look down X axis
+    MyAvatar.bodyYaw = 90.0;
+    MyAvatar.headYaw = 90.0;
+    spectatorCameraConfig.orientation = { x: 0.0, y: 0.7071, z: 0.0, w: 0.7071 };
+   
+    // Load models
     var TERRAIN_URL = Script.resolvePath(prefix + '../tools/autoTester/resources/Nevada-Moon-Rocks.baked.fbx');
     var terrain = Entities.addEntity({
         type: 'Model',
@@ -36,7 +37,7 @@ module.exports.test = function (testType) {
         modelURL: TERRAIN_URL,
         shapeType: 'box',
         dimensions: { x: 10000.0, y: 600.0, z: 10000.0 },
-        position: position
+        position: {x: MyAvatar.position.x - 5000, y: MyAvatar.position.y + 2.0, z: MyAvatar.position.z},
     });
 
     var SKY_URL = Script.resolvePath(prefix + '../tools/autoTester/resources/Sky_Day-Sun-Mid-photo.ktx');
@@ -65,12 +66,17 @@ module.exports.test = function (testType) {
         }
     });
 
+    var TREE_URL = Script.resolvePath(prefix + '../tools/autoTester/resources/PalmTree.fbx');
+    var tree = Entities.addEntity({
+        type: 'Model',
+        name: 'Tree',
+        shapeType: 'none',
+        modelURL: TREE_URL,
+        dimensions: { x: 5.0415, y: 12.1722, z: 4.9470 },
+        position: {x: MyAvatar.position.x - 100.0, y: MyAvatar.position.y, z: MyAvatar.position.z},
+    });
+
 	spectatorCameraConfig.position = {x: MyAvatar.position.x, y: MyAvatar.position.y + 0.6, z: MyAvatar.position.z};
-    
-    // Look down X axis
-    MyAvatar.bodyYaw = 90.0;
-    MyAvatar.headYaw = 90.0;
-    spectatorCameraConfig.orientation = { x: 0.0, y: 0.7071, z: 0.0, w: 0.7071 };
     
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
