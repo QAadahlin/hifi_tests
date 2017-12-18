@@ -12,7 +12,7 @@ module.exports.setupSnapshots = function (combinedPath) {
     MyAvatar.headPitch = 0.0;
     MyAvatar.headRoll = 0.0;
     
-    //    resolvePath(".") returns a string that looks like <path to High Fidelity resource folder> + "file:/" + <current folder>
+    //    resolvePath(".") returns a string that looks like "file:/" + <current folder>
     //    We need the current folder
     var path = combinedPath.substring(combinedPath.indexOf(":") + 4);
     Snapshot.setSnapshotsLocation(path);

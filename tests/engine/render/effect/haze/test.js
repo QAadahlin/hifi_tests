@@ -1,8 +1,29 @@
 module.exports.complete = false;
 
 module.exports.test = function (testType) {
-    var autoTester = Script.require("../../../../utils/autoTester.js");
+    // Find the root of the test tree.  The root contains the 'utils' folder
+    var combinedPath = Script.resolvePath(".");
+    var parts = combinedPath.split("/");
+    
+    // note that the current folder is one before last in 'parts'
+    var testsRootHeight = 0;
+    for (var i = parts.length - 2; i >= 0; --i) {
+        if (parts[i] === 'tests') {
+            testsRootHeight = parts.length - 2 - i;
+            break;
+        }
+    }
+    
+    var prefix = "";
+    for (var i = 0; i < testsRootHeight; ++i) {
+        prefix += "../";
+    }
 
+    // Setup snapshots
+    var autoTester = Script.require(prefix + "utils/autoTester.js");
+    var camera = autoTester.setupSnapshots(combinedPath);
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
+    
     // Load terrain
     var position =  MyAvatar.position;
     position.x = position.x - 5000.0;
@@ -44,8 +65,6 @@ module.exports.test = function (testType) {
         }
     });
 
-    autoTester.setupSnapshots(Script.resolvePath("."));
-    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
 	spectatorCameraConfig.position = {x: MyAvatar.position.x, y: MyAvatar.position.y + 0.6, z: MyAvatar.position.z};
     
     // Look down X axis

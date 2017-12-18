@@ -1,7 +1,28 @@
 module.exports.complete = false;
 
 module.exports.test = function (testType) {
-    var autoTester = Script.require("../../../../utils/autoTester.js");
+    // Find the root of the test tree.  The root contains the 'utils' folder
+    var combinedPath = Script.resolvePath(".");
+    var parts = combinedPath.split("/");
+    
+    // note that the current folder is one before last in 'parts'
+    var testsRootHeight = 0;
+    for (var i = parts.length - 2; i >= 0; --i) {
+        if (parts[i] === 'tests') {
+            testsRootHeight = parts.length - 2 - i;
+            break;
+        }
+    }
+    
+    var prefix = "";
+    for (var i = 0; i < testsRootHeight; ++i) {
+        prefix += "../";
+    }
+
+    // Setup snapshots
+    var autoTester = Script.require(prefix + "utils/autoTester.js");
+    var camera = autoTester.setupSnapshots(combinedPath);
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
     
     // The models are loaded from the "MODEL_DIR_URL" located on github where we store all our test models
     var MODEL_DIR_URL = "https://github.com/highfidelity/hifi_tests/blob/master/assets/models/material_matrix_models/fbx/blender/";
@@ -168,9 +189,6 @@ module.exports.test = function (testType) {
         Entities.deleteEntity(marker2);
         Entities.deleteEntity(marker3);
     }
-
-    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
-    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
 	
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.

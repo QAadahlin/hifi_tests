@@ -8,8 +8,9 @@ The auto-tester is a stand alone application that provides a mechanism for regre
 
 A script named **deleteAllEntities.js** is provided in the **tests/utils** folder for that purpose.
 
-##autoTester.js
+## autoTester.js
 Another script in the **tests/utils** folder is **autoTester.js**.
+This is a bit complicated to `require` as the test folder hierarchy can be deep.  Please note the code example in *Test File Content*
 
 This script is a module that exposes two functions.
 ### setupSnapshots.js
@@ -42,6 +43,7 @@ The **test.js** file itself has two requirements:
     1. Initialized to false
     2. Set to true on completion of the test
     
+In addition, the test hierarchy, only the test root may, and must, be named **tests**.  This is because the test needs to find the **tests/utils** folder.
     
 A test expects an empty world and should end with an empty world, for the next test (if any).  The test should create a list of snapshots in the local folder.  The following code snippet describes one way of doing this.
 
@@ -49,6 +51,29 @@ A test expects an empty world and should end with an empty world, for the next t
 module.exports.complete = false;
 
 module.exports.test = function() {
+    // Find the root of the test tree.  The root contains the 'utils' folder
+    var combinedPath = Script.resolvePath(".");
+    var parts = combinedPath.split("/");
+    
+    // note that the current folder is one before last in 'parts'
+    var testsRootHeight = 0;
+    for (var i = parts.length - 2; i >= 0; --i) {
+        if (parts[i] === 'tests') {
+            testsRootHeight = parts.length - 2 - i;
+            break;
+        }
+    }
+    
+    var prefix = "";
+    for (var i = 0; i < testsRootHeight; ++i) {
+        prefix += "../";
+    }
+
+    // Setup snapshots
+    var autoTester = Script.require(prefix + "utils/autoTester.js");
+    var camera = autoTester.setupSnapshots(combinedPath);
+    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
+
     // Look down Z axis 
     MyAvatar.bodyYaw = 0.0;
     MyAvatar.bodyPitch = 0.0;
@@ -58,10 +83,6 @@ module.exports.test = function() {
     MyAvatar.headRoll = 0.0;
 
     // Add some entities...
-
-    // Setup snapshots
-    var camera = autoTester.setupSnapshots(Script.resolvePath("."));
-    var spectatorCameraConfig = Render.getConfig("SecondaryCamera");
 
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
