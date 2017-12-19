@@ -1,39 +1,16 @@
-# Entity Zone Inheritance
+# Keylight Zone Inheritance
 ## General
 This test will build the following zone hierarchy:
 
 ![](./hierarchy.png) 
 
-The tests consist of setting zone component parameters and moving through the zones.
+The tests consist of setting keylight component parameters and moving through the zones.  In each zone, the keylight modes are changed.
 
 ## Preconditions
-Run interface and delete all content
+In an empty region of a domain with editing rights
+## Test
+The test images are named ExpectedImage_00001 and up.
+**runTestStepByStep** will produce each of these images, stepping is performed by hitting the space bar.
 
-## Steps
-
-### Step 1
-- run this [script URL](./create.js?raw=true) (from menu: Edit->Open and Run Script File...). 
-- expected ![](./create.png)
-  - A 1000m x 1000m flat terrain
-  - 4 areas are defined on the terrain.  Each area corresponds with a matching zone; the zones are all 10 m high.
-  
-### Step 2
-This part consists of stepping through 8 positions and verifying the colour of the keylight.  This can be seen by moving back from the avatar and observing its head.
-
-1. Run [script URL](./A.js?raw=true)
-   * Keylight is red  
-1. Run [script URL](./B.js?raw=true)
-   * Keylight is green  
-1. Run [script URL](./C.js?raw=true)
-   * Keylight is blue  
-1. Run [script URL](./D.js?raw=true)
-   * Keylight is blue  
-1. Run [script URL](./E.js?raw=true)
-   * Keylight is green  
-1. Run [script URL](./F.js?raw=true)
-   * Keylight is yellow  
-1. Run [script URL](./G.js?raw=true)
-   * Keylight is yellow  
-1. Run [script URL](./H.js?raw=true)
-   * Keylight is red  
+**runTest** will perform all steps to completion, creating a sequence of snapshots.  These snapshots should match the expected images.
 
