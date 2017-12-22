@@ -37,49 +37,66 @@ module.exports.test = function (testType) {
     // Set up test environment
     var avatarOriginPosition = MyAvatar.position;
     
-    var zone1Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.01, z: avatarOriginPosition.z - 15.0 };
-    var zone2Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.02, z: avatarOriginPosition.z - 15.0 };
-    var zone3Position = { x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.03, z: avatarOriginPosition.z - 15.0 };
+    var zoneRedPosition = { x: avatarOriginPosition.x, y: avatarOriginPosition.y - 4.0, z: avatarOriginPosition.z - 17.5 };
+    var zoneBluePosition = { x: avatarOriginPosition.x, y: avatarOriginPosition.y - 4.0, z: avatarOriginPosition.z - 17.5 };
+    var zoneGreenPosition = { x: avatarOriginPosition.x, y: avatarOriginPosition.y - 4.0, z: avatarOriginPosition.z - 17.5 };
 
     var zoneHeight = 10.0;
-    var zone1Dimensions = { x: 40.0, y: zoneHeight, z: 40.0};
-    var zone2Dimensions = { x: 30.0, y: zoneHeight, z: 30.0};
-    var zone3Dimensions = { x: 20.0, y: zoneHeight, z: 20.0};
+    var zoneRedDimensions = { x: 40.0, y: zoneHeight, z: 40.0};
+    var zoneGreenDimensions = { x: 30.0, y: zoneHeight, z: 30.0};
+    var zoneBlueDimensions = { x: 20.0, y: zoneHeight, z: 20.0};
     
     // Create zones
-    var zone1properties = {
+    var zoneRedProperties = {
         type: "Zone",
-        name: "zone 1",
-        position: zone1Position,
-        dimensions: zone1Dimensions,
+        name: "zone red",
+        position: zoneRedPosition,
+        dimensions: zoneRedDimensions,
+        keyLightMode: "enabled",
         keyLight:{"color": {"red":200,"green":0,"blue":0}},
         backgroundMode:"skybox",
         skybox:{"color":{"red":200,"green":0,"blue":0}}
     };
-    var zone1 = Entities.addEntity(zone1properties);
+    var zoneRed = Entities.addEntity(zoneRedProperties);
 
-    var zone2properties = {
+    var zoneGreenProperties = {
         type: "Zone",
-        name: "zone 2",
-        position: zone2Position,
-        dimensions: zone2Dimensions,
+        name: "zone green",
+        position: zoneGreenPosition,
+        dimensions: zoneGreenDimensions,
+        keyLightMode: "enabled",
         keyLight:{"color": {"red":0,"green":200,"blue":0}},
         backgroundMode:"skybox",
         skybox:{"color":{"red":0,"green":200,"blue":0}}
     };
-    var zone2 = Entities.addEntity(zone2properties);
+    var zoneGreen = Entities.addEntity(zoneGreenProperties);
 
-    var zone3properties = {
+    var zoneBlueProperties = {
         type: "Zone",
-        name: "zone 3",
-        position: zone3Position,
-        dimensions: zone3Dimensions,
+        name: "zone blue",
+        position: zoneBluePosition,
+        dimensions: zoneBlueDimensions,
+        keyLightMode: "enabled",
         keyLight:{"color": {"red":0,"green":0,"blue":200}},
         backgroundMode:"skybox",
         skybox:{"color":{"red":0,"green":0,"blue":200}}
     };
-    var zone3 = Entities.addEntity(zone3properties);
-
+    var zoneBlue = Entities.addEntity(zoneBlueProperties);
+    
+    // Add a sphere
+    var DX = 0.0;
+    var DY = 0.6;
+    var DZ = -2.0;
+    var sphereProperties = {
+        type: "Sphere",
+        name: "sphere",
+        position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ},
+        dimensions: { x: 0.4, y: 0.4, z: 0.4 },
+        "color": {"red":255,"green":255,"blue":255},
+        visible: true
+    };
+    var sphere = Entities.addEntity(sphereProperties);
+    
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
@@ -88,28 +105,77 @@ module.exports.test = function (testType) {
     // or stepped through with the space bar
     var steps = [
         function () {
+            // In Red zone, all keylights on
         },
         
-        // In Red zone, keylight is inherit
         function () {
+            // In Green zone
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 5.0};           
             spectatorCameraConfig.position = {x: avatarOriginPosition.x , y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 5.0};
+
+            var newProperty = {position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ}};
+            Entities.editEntity(sphere, newProperty);  
         },
         
         function () {
+            // In Blue zone
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 10.0};           
             spectatorCameraConfig.position = {x: avatarOriginPosition.x , y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 10.0};
+
+            var newProperty = {position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ}};
+            Entities.editEntity(sphere, newProperty);  
         },
         
         function () {
-            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 15.0};           
-            spectatorCameraConfig.position = {x: avatarOriginPosition.x , y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 15.0};
+            // Disable Blue keylight (should be dark)
+            var newProperty = {keyLightMode: "disabled"};
+            Entities.editEntity(zoneBlue, newProperty);  
         },
         
         function () {
-            Entities.deleteEntity(zone1);
-            Entities.deleteEntity(zone2);
-            Entities.deleteEntity(zone3);
+            // Set Blue keylight to inherit (should now be green)
+            var newProperty = {keyLightMode: "inherit"};
+            Entities.editEntity(zoneBlue, newProperty);  
+        },
+        
+        function () {
+            // Disable Green keylight (should now be dark)
+            var newProperty = {keyLightMode: "disabled"};
+            Entities.editEntity(zoneGreen, newProperty);  
+        },
+        
+        function () {
+            // Set Green keylight to inherit (should now be red)
+            var newProperty = {keyLightMode: "inherit"};
+            Entities.editEntity(zoneGreen, newProperty);  
+        },
+        
+        function () {
+            // Disable Red keylight (should now be dark)
+            var newProperty = {keyLightMode: "disabled"};
+            Entities.editEntity(zoneRed, newProperty);  
+        },
+        
+        function () {
+            // In Green zone - should still be dark
+            MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 5.0};           
+            spectatorCameraConfig.position = {x: avatarOriginPosition.x , y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 5.0};
+
+            var newProperty = {position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ}};
+            Entities.editEntity(sphere, newProperty);  
+        },
+                
+        function () {
+            // Enable Red keylight (should now be red)
+            var newProperty = {keyLightMode: "enabled"};
+            Entities.editEntity(zoneRed, newProperty);  
+        },
+
+        function () {
+            Entities.deleteEntity(zoneRed);
+            Entities.deleteEntity(zoneGreen);
+            Entities.deleteEntity(zoneBlue);
+            Entities.deleteEntity(sphere);
           
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
@@ -121,6 +187,12 @@ module.exports.test = function (testType) {
     var i = 0;
     if (testType  == "auto") {
         autoTester.addStep(false, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
+        autoTester.addStep(true, steps[i++], STEP_TIME);
         autoTester.addStep(true, steps[i++], STEP_TIME);
         autoTester.addStep(true, steps[i++], STEP_TIME);
         autoTester.addStep(true, steps[i++], STEP_TIME);
