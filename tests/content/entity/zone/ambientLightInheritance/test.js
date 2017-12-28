@@ -47,6 +47,7 @@ module.exports.test = function (testType) {
     var zoneBlueDimensions  = { x: 20.0, y: ZONE_HEIGHT, z: 20.0};
     
     // Create zones
+    var BRIGHT_SKY_URL = Script.resolvePath(prefix + '../tools/autoTester/resources/Sky_Day-Sun-Mid-photo.ktx');
     var zoneRedProperties = {
         type: "Zone",
         name: "zone red",
@@ -55,12 +56,13 @@ module.exports.test = function (testType) {
         keyLightMode: "disabled",
         ambientLightMode: "enabled",
         ambientLight: {
-            ambientURL: "http://hifi-content.s3.amazonaws.com/DomainContent/baked/island/Sky_Day-Sun-Mid-photo.ktx"
+            ambientURL: BRIGHT_SKY_URL
         },
         backgroundMode:"nothing"
     };
     var zoneRed = Entities.addEntity(zoneRedProperties);
 
+    var CLOUDY_SKY_URL = Script.resolvePath(prefix + '../tools/autoTester/resources/ThickCloudsWater2.jpg');
     var zoneGreenProperties = {
         type: "Zone",
         name: "zone green",
@@ -69,12 +71,13 @@ module.exports.test = function (testType) {
         keyLightMode: "disabled",
         ambientLightMode: "enabled",
         ambientLight: {
-            ambientURL: "https://hifi-public.s3.amazonaws.com/images/SkyboxTextures/ThickCloudsWater2.jpg"
+            ambientURL: CLOUDY_SKY_URL
         },
         backgroundMode:"nothing"
     };
     var zoneGreen = Entities.addEntity(zoneGreenProperties);
 
+    var NIGHT_SKY_URL = Script.resolvePath(prefix + '../tools/autoTester/resources/FullMoon1024Compressed.jpg');
     var zoneBlueProperties = {
         type: "Zone",
         name: "zone blue",
@@ -83,7 +86,7 @@ module.exports.test = function (testType) {
         keyLightMode: "disabled",
         ambientLightMode: "enabled",
         ambientLight: {
-            ambientURL: "https://hifi-public.s3.amazonaws.com/images/SkyboxTextures/FullMoon1024Compressed.jpg"
+            ambientURL: NIGHT_SKY_URL
         },
         backgroundMode:"nothing"
     };
