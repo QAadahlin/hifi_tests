@@ -48,20 +48,26 @@ module.exports.test = function (testType) {
         rotation: MyAvatar.orientation,    
         dimensions: { x: 10000.0, y: 600.0, z: 10000.0 },
 
+        keyLightMode: "enabled",
         keyLight:{
-            color: {"red":255,"green":255,"blue":255},
+            color: {"red":255, "green":255, "blue":255},
             direction: {
-                "x": 0.037007175385951996,
+                "x":  0.037007175385951996,
                 "y": -0.7071067690849304,
                 "z": -0.7061376571655273
             },
             intensity: 0.8
         },
 
-        backgroundMode:"skybox",
-        skybox:{
+        skyboxMode: "enabled",
+        skybox: {
             color: {"red":255,"green":255,"blue":255},
             url: SKY_URL
+        },
+        
+        ambientLightMode: "enabled",
+        ambientLight: {
+            ambientURL: SKY_URL
         }
     });
 
