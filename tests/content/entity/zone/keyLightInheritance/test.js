@@ -52,9 +52,11 @@ module.exports.test = function (testType) {
         name: "zone red",
         position: zoneRedPosition,
         dimensions: zoneRedDimensions,
+        
         keyLightMode: "enabled",
         keyLight:{"color": {"red":200,"green":0,"blue":0}},
-        backgroundMode:"skybox",
+
+        skyboxMode: "enabled",
         skybox:{"color":{"red":200,"green":0,"blue":0}}
     };
     var zoneRed = Entities.addEntity(zoneRedProperties);
@@ -64,9 +66,11 @@ module.exports.test = function (testType) {
         name: "zone green",
         position: zoneGreenPosition,
         dimensions: zoneGreenDimensions,
+        
         keyLightMode: "enabled",
         keyLight:{"color": {"red":0,"green":200,"blue":0}},
-        backgroundMode:"skybox",
+
+        skyboxMode: "enabled",
         skybox:{"color":{"red":0,"green":200,"blue":0}}
     };
     var zoneGreen = Entities.addEntity(zoneGreenProperties);
@@ -76,9 +80,11 @@ module.exports.test = function (testType) {
         name: "zone blue",
         position: zoneBluePosition,
         dimensions: zoneBlueDimensions,
+        
         keyLightMode: "enabled",
         keyLight:{"color": {"red":0,"green":0,"blue":200}},
-        backgroundMode:"skybox",
+
+        skyboxMode: "enabled",
         skybox:{"color":{"red":0,"green":0,"blue":200}}
     };
     var zoneBlue = Entities.addEntity(zoneBlueProperties);

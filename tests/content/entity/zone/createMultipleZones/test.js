@@ -42,8 +42,11 @@ module.exports.test = function(testType) {
         name: "zone 1",
         position: zone1Position,
         dimensions: zone1Dimensions,
+
+        keyLightMode: "enabled",
         keyLight:{"color": {"red":200,"green":0,"blue":0}},
-        backgroundMode:"skybox",
+
+        skyboxMode: "enabled",
         skybox:{"color":{"red":200,"green":0,"blue":0}}
     };
     var zone1 = Entities.addEntity(zone1properties);
@@ -53,8 +56,11 @@ module.exports.test = function(testType) {
         name: "zone 2",
         position: zone2Position,
         dimensions: zone2Dimensions,
+
+        keyLightMode: "enabled",
         keyLight:{"color": {"red":150,"green":150,"blue":0}},
-        backgroundMode:"skybox",
+
+        skyboxMode: "enabled",
         skybox:{"color":{"red":150,"green":150,"blue":0}}
     };
     var zone2 = Entities.addEntity(zone2properties);
@@ -64,8 +70,11 @@ module.exports.test = function(testType) {
         name: "zone 3",
         position: zone3Position,
         dimensions: zone3Dimensions,
+
+        keyLightMode: "enabled",
         keyLight:{"color": {"red":0,"green":200,"blue":0}},
-        backgroundMode:"skybox",
+
+        skyboxMode: "enabled",
         skybox:{"color":{"red":0,"green":200,"blue":0}}
     };
     var zone3 = Entities.addEntity(zone3properties);
@@ -75,8 +84,11 @@ module.exports.test = function(testType) {
         name: "zone 4",
         position: zone4Position,
         dimensions: zone4Dimensions,
+
+        keyLightMode: "enabled",
         keyLight:{"color": {"red":0,"green":0,"blue":200}},
-        backgroundMode:"skybox",
+
+        skyboxMode: "enabled",
         skybox:{"color":{"red":0,"green":0,"blue":200}}
     };
     var zone4 = Entities.addEntity(zone4properties);

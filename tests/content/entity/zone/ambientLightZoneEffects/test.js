@@ -76,6 +76,7 @@ module.exports.test = function (testType) {
         rotation: MyAvatar.orientation,    
         dimensions: zone1Dimensions,
 
+        keyLightMode: "enabled",
         keyLight:{
             color: {"red":255,"green":255,"blue":255},
             direction: {
@@ -86,10 +87,15 @@ module.exports.test = function (testType) {
             intensity: 0.8
         },
 
-        backgroundMode:"skybox",
+        skyboxMode: "enabled",
         skybox:{
             color: {"red":255,"green":255,"blue":255},
             url: BRIGHT_SKY_URL
+        },
+        
+        ambientLightMode: "enabled",
+        ambientLight: {
+            ambientURL: BRIGHT_SKY_URL
         }
     };
     var zone1 = Entities.addEntity(zone1properties);
@@ -103,6 +109,7 @@ module.exports.test = function (testType) {
         rotation: MyAvatar.orientation,    
         dimensions: zone2Dimensions,
 
+        keyLightMode: "enabled",
         keyLight:{
             color: {"red":255,"green":255,"blue":255},
             direction: {
@@ -113,10 +120,15 @@ module.exports.test = function (testType) {
             intensity: 0.8
         },
 
-        backgroundMode:"skybox",
+        skyboxMode: "enabled",
         skybox:{
             color: {"red":255,"green":255,"blue":255},
             url: CLOUDY_SKY_URL
+        },
+        
+        ambientLightMode: "enabled",
+        ambientLight: {
+            ambientURL: CLOUDY_SKY_URL
         }
     };
     var zone2 = Entities.addEntity(zone2properties);
@@ -130,6 +142,7 @@ module.exports.test = function (testType) {
         rotation: MyAvatar.orientation,    
         dimensions: zone3Dimensions,
 
+        keyLightMode: "enabled",
         keyLight:{
             color: {"red":255,"green":255,"blue":255},
             direction: {
@@ -140,10 +153,15 @@ module.exports.test = function (testType) {
             intensity: 0.8
         },
 
-        backgroundMode:"skybox",
+        skyboxMode: "enabled",
         skybox:{
             color: {"red":255,"green":255,"blue":255},
             url: NIGHT_SKY_URL
+        },
+        
+        ambientLightMode: "enabled",
+        ambientLight: {
+            ambientURL: NIGHT_SKY_URL
         }
     };
     var zone3 = Entities.addEntity(zone3properties);

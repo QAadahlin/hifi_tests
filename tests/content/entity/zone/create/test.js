@@ -46,7 +46,8 @@ module.exports.test = function (testType) {
         position: pos,
         dimensions: dim,
         keyLight:{"color": {"red":0,"green":255,"blue":0}},
-        backgroundMode:"skybox",
+        
+        skyboxMode: "enabled",
         skybox:{"color":{"red":0,"green":0,"blue":255}}
     };
 

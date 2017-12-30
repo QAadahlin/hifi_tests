@@ -58,7 +58,7 @@ module.exports.test = function (testType) {
         ambientLight: {
             ambientURL: BRIGHT_SKY_URL
         },
-        backgroundMode:"nothing"
+        skyboxMode:"inherit"
     };
     var zoneRed = Entities.addEntity(zoneRedProperties);
 
@@ -73,7 +73,7 @@ module.exports.test = function (testType) {
         ambientLight: {
             ambientURL: CLOUDY_SKY_URL
         },
-        backgroundMode:"nothing"
+        skyboxMode:"inherit"
     };
     var zoneGreen = Entities.addEntity(zoneGreenProperties);
 
@@ -88,7 +88,7 @@ module.exports.test = function (testType) {
         ambientLight: {
             ambientURL: NIGHT_SKY_URL
         },
-        backgroundMode:"nothing"
+        skyboxMode:"inherit"
     };
     var zoneBlue = Entities.addEntity(zoneBlueProperties);
     
