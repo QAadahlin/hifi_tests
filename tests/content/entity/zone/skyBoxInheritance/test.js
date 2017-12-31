@@ -55,13 +55,13 @@ module.exports.test = function (testType) {
         dimensions: zoneRedDimensions,
         
         keyLightMode: "disabled",
+        ambientLightMode: "disabled",
         
-        ambientLightMode: "enabled",
-        ambientLight: {
-            ambientURL: BRIGHT_SKY_URL
-        },
-        
-        skyboxMode:"inherit"
+        skyboxMode:"enabled",
+        skybox: {
+            color: {"red":255,"green":255,"blue":255},
+            url: BRIGHT_SKY_URL
+        }
     };
     var zoneRed = Entities.addEntity(zoneRedProperties);
 
@@ -71,12 +71,15 @@ module.exports.test = function (testType) {
         name: "zone green",
         position: zoneGreenPosition,
         dimensions: zoneGreenDimensions,
+        
         keyLightMode: "disabled",
-        ambientLightMode: "enabled",
-        ambientLight: {
-            ambientURL: CLOUDY_SKY_URL
-        },
-        skyboxMode:"inherit"
+        ambientLightMode: "disabled",
+        
+        skyboxMode:"enabled",
+        skybox: {
+            color: {"red":255,"green":255,"blue":255},
+            url: CLOUDY_SKY_URL
+        }
     };
     var zoneGreen = Entities.addEntity(zoneGreenProperties);
 
@@ -88,30 +91,20 @@ module.exports.test = function (testType) {
         dimensions: zoneBlueDimensions,
         
         keyLightMode: "disabled",
-        
-        ambientLightMode: "enabled",
-        ambientLight: {
-            ambientURL: NIGHT_SKY_URL
-        },
-        
-        skyboxMode:"inherit"
+        ambientLightMode: "disabled",
+
+        skyboxMode:"enabled",
+        skybox: {
+            color: {"red":255,"green":255,"blue":255},
+            url: NIGHT_SKY_URL
+        }
     };
     var zoneBlue = Entities.addEntity(zoneBlueProperties);
-    
-    // Add a white sphere
-    var DX = 0.0;
-    var DY = 0.6;
+ 
+    var DX =  0.0;
+    var DY =  0.6;
     var DZ = -2.0;
-    var sphereProperties = {
-        type: "Sphere",
-        name: "sphere",
-        position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ},
-        dimensions: { x: 0.4, y: 0.4, z: 0.4 },
-        "color": {"red":255,"green":255,"blue":255},
-        visible: true
-    };
-    var sphere = Entities.addEntity(sphereProperties);
-    
+ 
     // Note that the image for the current step is snapped at the beginning of the next step.
     // This is because it may take a while for the image to stabilize.
     var STEP_TIME = 2000;
@@ -120,69 +113,60 @@ module.exports.test = function (testType) {
     // or stepped through with the space bar
     var steps = [
         function () {
-            print("red zone, bright ambient light");
+            print("red zone, bright sky");
         },
         
         function () {
-            print("green zone, medium ambient light");
+            print("green zone, cloudy");
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 5.0};           
             spectatorCameraConfig.position = {x: avatarOriginPosition.x , y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 5.0};
-
-            var newProperty = {position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ}};
-            Entities.editEntity(sphere, newProperty);
         },
         
         function () {
-            print("blue zone, dark ambient light");
+            print("blue zone, night");
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 10.0};           
             spectatorCameraConfig.position = {x: avatarOriginPosition.x , y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 10.0};
-
-            var newProperty = {position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ}};
-            Entities.editEntity(sphere, newProperty);  
         },
         
         function () {
-            print("blue off,  no ambient light");
-            var newProperty = {ambientLightMode: "disabled"};
+            print("blue off, dark");
+            var newProperty = {skyboxMode: "disabled"};
             Entities.editEntity(zoneBlue, newProperty);  
         },
         
         function () {
-            print("blue inherit, medium ambient light");
-            var newProperty = {ambientLightMode: "inherit"};
+            print("blue inherit, cloudy");
+            var newProperty = {skyboxMode: "inherit"};
             Entities.editEntity(zoneBlue, newProperty);  
         },
         
         function () {
-            print("green off,  no ambient light");
-            var newProperty = {ambientLightMode: "disabled"};
+            print("green off, dark");
+            var newProperty = {skyboxMode: "disabled"};
             Entities.editEntity(zoneGreen, newProperty);  
         },
         
         function () {
-            print("green inherit, bright ambient light");
-            var newProperty = {ambientLightMode: "inherit"};
+            print("green inherit, bright sky");
+            var newProperty = {skyboxMode: "inherit"};
             Entities.editEntity(zoneGreen, newProperty);  
         },
         
         function () {
-            print("red off,  no ambient light");
-            var newProperty = {ambientLightMode: "disabled"};
+            print("red off, dark");
+            var newProperty = {skyboxMode: "disabled"};
             Entities.editEntity(zoneRed, newProperty);  
         },
         
         function () {
-            print("green zone, still no ambient light");
+            print("green zone, still dark");
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z - 5.0};           
             spectatorCameraConfig.position = {x: avatarOriginPosition.x , y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z - 5.0};
-
-            var newProperty = {position: {x: MyAvatar.position.x + DX, y: MyAvatar.position.y + DY, z: MyAvatar.position.z + DZ}};
-            Entities.editEntity(sphere, newProperty);  
         },
                 
         function () {
-            print("red on, bright ambient light");
-            var newProperty = {ambientLightMode: "enabled"};
+            print("red on, bright sky");
+            var newProperty = {skyboxMode: "enabled"};
             Entities.editEntity(zoneRed, newProperty);  
         },
 
@@ -190,7 +174,6 @@ module.exports.test = function (testType) {
             Entities.deleteEntity(zoneRed);
             Entities.deleteEntity(zoneGreen);
             Entities.deleteEntity(zoneBlue);
-            Entities.deleteEntity(sphere);
           
             MyAvatar.position  = {x: avatarOriginPosition.x, y: avatarOriginPosition.y, z: avatarOriginPosition.z};
             spectatorCameraConfig.position = {x: avatarOriginPosition.x, y: avatarOriginPosition.y + 0.6, z: avatarOriginPosition.z};
