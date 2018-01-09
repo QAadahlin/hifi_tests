@@ -57,7 +57,7 @@ module.exports.test = function (testType) {
         keyLightMode: "disabled",
         ambientLightMode: "disabled",
         
-        skyboxMode:"enabled",
+        skyboxMode: "enabled",
         skybox: {
             color: {"red":255,"green":255,"blue":255},
             url: BRIGHT_SKY_URL
