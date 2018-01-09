@@ -142,11 +142,11 @@ var markerBlueProperties = {
 };
 var markerBlue = Entities.addEntity(markerBlueProperties);
 
-// Add a white sphere in centre
+// Add a white sphere left of centre
 var sphereProperties = {
     type: "Sphere",
     name: "sphere",
-    position: {x: MyAvatar.position.x, y: MyAvatar.position.y + 0.6, z: MyAvatar.position.z - 17.5},
+    position: {x: MyAvatar.position.x - 2.0, y: MyAvatar.position.y + 0.6, z: MyAvatar.position.z - 17.5},
     dimensions: { x: 1.0, y: 1.2, z: 1.4 },
     "color": {"red":255,"green":255,"blue":255},
     visible: true
